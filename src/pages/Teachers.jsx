@@ -101,7 +101,7 @@ export default function Teachers() {
                   {moment(teacher.createdAt).format("MM-DD-YYYY")}
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-1">
-                  <Link to={`/update/${teacher._id}`}>
+                  <Link to={`/update-teacher/${teacher._id}`}>
                     <Button size="xs">
                       <HiPencil size={18} className="hover:text-orange-500" />
                     </Button>

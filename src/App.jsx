@@ -44,12 +44,18 @@ export const App = () => {
           />
           {/* Teacher Routes */}
           <Route path="/teachers" element={<Teachers />} />
-          <Route path="create-teacher" element={<CreateTeacher />} />
-          <Route path="/update/:teacherId" element={<UpdateTeacher />} />
+          <Route path="/create-teacher" element={<CreateTeacher />} />
+          <Route
+            path="/update-teacher/:teacherId"
+            element={<UpdateTeacher />}
+          />
           {/* Session Routes */}
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/create-session" element={<CreateSession />} />
-          <Route path="/update/:sessionId" element={<UpdateSession />} />
+          <Route
+            path="/update-session/:sessionId"
+            element={<UpdateSession />}
+          />
         </Route>
       </Routes>
       <Footer />

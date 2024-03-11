@@ -52,7 +52,7 @@ export default function Sessions() {
         <Toaster />
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">
-            Faculty List
+            Session List
           </h1>
           <Button
             className="mr-2"
@@ -91,7 +91,7 @@ export default function Sessions() {
                   {moment(session.createdAt).format("MM-DD-YYYY")}
                 </Table.Cell>
                 <Table.Cell className="flex flex-row gap-1">
-                  <Link to={`/update/${session._id}`}>
+                  <Link to={`/update-session/${session._id}`}>
                     <Button size="xs">
                       <HiPencil size={18} className="hover:text-orange-500" />
                     </Button>
