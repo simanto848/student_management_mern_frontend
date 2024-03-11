@@ -30,8 +30,8 @@ export default function UpdateSession() {
       return toast.error("Session is required");
     }
     try {
-      const res = await fetch("/api/session/create-session", {
-        method: "POST",
+      const res = await fetch(`/api/session/update/${sessionId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
