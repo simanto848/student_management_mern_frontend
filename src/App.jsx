@@ -17,6 +17,9 @@ import UpdateTeacher from "./pages/UpdateTeacher";
 import Sessions from "./pages/Sessions";
 import CreateSession from "./pages/CreateSession";
 import UpdateSession from "./pages/UpdateSession";
+import Courses from "./pages/Courses";
+import CreateCourse from "./pages/CreateCourse";
+import UpdateCourse from "./pages/UpdateCourse";
 
 export const App = () => {
   return (
@@ -56,6 +59,9 @@ export const App = () => {
             path="/update-session/:sessionId"
             element={<UpdateSession />}
           />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/create-course" element={<CreateCourse />} />
+          <Route path="/update-course/:courseId" element={<UpdateCourse />} />
         </Route>
       </Routes>
       <Footer />
