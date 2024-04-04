@@ -147,7 +147,7 @@ export default function Departments() {
         />
         <Modal
           title="Edit Department"
-          visible={editModalVisible}
+          open={editModalVisible}
           onCancel={handleCancelEdit}
           onOk={handleUpdate}
         >
@@ -185,7 +185,7 @@ export default function Departments() {
         </Modal>
         <Modal
           title="Confirm Delete"
-          visible={deleteModalVisible}
+          open={deleteModalVisible}
           onOk={handleDelete}
           onCancel={() => setDeleteModalVisible(false)}
           okText="Delete"

@@ -138,7 +138,7 @@ export default function Faculties() {
 
       <Modal
         title="Edit Faculty"
-        visible={editModalVisible}
+        open={editModalVisible}
         onCancel={handleCancelEdit}
         onOk={handleUpdate}
       >
