@@ -7,29 +7,16 @@ import {
   HiUser,
 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { getUserFromCookie } from "../services/Cookies";
+import { signOut } from "../services/AuthService";
 
 export default function DashSidebar() {
-  const currentUser = getUserFromCookie("user");
+  const currentUser = getUserFromCookie();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    try {
-      const res = await fetch("/api/auth/sign-out", {
-        method: "POST",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      }
-      Cookies.remove("user");
-      navigate("/");
-    } catch (error) {
-      console.log(error.message);
-      return toast.error(error.message);
-    }
+    signOut(navigate);
   };
 
   return (

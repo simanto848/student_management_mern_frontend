@@ -1,5 +1,6 @@
+import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
-import { setUserCookie } from "./Cookies";
+import { cookieName, setUserCookie } from "./Cookies";
 
 export const login = async (formData, navigate) => {
   if (!formData.email || !formData.password) {
@@ -17,10 +18,26 @@ export const login = async (formData, navigate) => {
       return toast.error(data.message);
     }
 
-    setUserCookie("user", data.user);
+    setUserCookie(data.user);
 
     navigate("/dashboard");
   } catch (error) {
     toast.error(error.message);
+  }
+};
+
+export const signOut = async (navigate) => {
+  try {
+    const res = await fetch("/api/auth/sign-out", {
+      method: "POST",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      return toast.error(data.message);
+    }
+    Cookies.remove(cookieName);
+    navigate("/");
+  } catch (error) {
+    return toast.error(error.message);
   }
 };
