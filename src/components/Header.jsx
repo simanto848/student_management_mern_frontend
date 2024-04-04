@@ -1,17 +1,19 @@
-import { Navbar } from "flowbite-react";
+import { Layout, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-export default function Header() {
+const { Header } = Layout;
+const { Title } = Typography;
+
+export default function AppHeader() {
   return (
-    <Navbar className="border-b-2">
-      <Link
-        to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
-      >
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
-          EDUCATION
-        </span>
-      </Link>
-    </Navbar>
+    <Header className="bg-gray-200 shadow-md border-b-2">
+      <div className="container mx-auto flex items-center h-full px-4">
+        <Link to="/" className="flex items-center justify-center h-full">
+          <Title level={4} className="text-white text-xl font-semibold">
+            EDUCATION
+          </Title>
+        </Link>
+      </div>
+    </Header>
   );
 }

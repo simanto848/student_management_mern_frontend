@@ -1,18 +1,21 @@
-import { Sidebar } from "flowbite-react";
+import { Layout, Menu } from "antd";
 import {
-  HiChartPie,
-  HiInbox,
-  HiShoppingBag,
-  HiTable,
-  HiUser,
-} from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+  PieChartOutlined,
+  UserOutlined,
+  InboxOutlined,
+  ShoppingOutlined,
+  TableOutlined,
+} from "@ant-design/icons";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getUserFromCookie } from "../services/Cookies";
 import { signOut } from "../services/AuthService";
 
-export default function DashSidebar() {
+const { Sider } = Layout;
+const { SubMenu } = Menu;
+
+const Sidebar = () => {
   const currentUser = getUserFromCookie();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -20,53 +23,62 @@ export default function DashSidebar() {
   };
 
   return (
-    <Sidebar aria-label="Default sidebar example">
-      <Toaster position="top-right" />
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item
-            icon={HiChartPie}
-            label={currentUser && currentUser.role}
-            labelColor="dark"
-          >
-            <Link to="/dashboard">Dashboard</Link>
-          </Sidebar.Item>
-          {currentUser && currentUser.role === "admin" && (
-            <Sidebar.Collapse icon={HiShoppingBag} label="Details">
-              <Sidebar.Item>
-                <Link to="/faculties">Faculties</Link>
-              </Sidebar.Item>
-              <Sidebar.Item>
-                <Link to="/departments">Departments</Link>
-              </Sidebar.Item>
-              <Sidebar.Item>
-                <Link to="/teachers">Teachers</Link>
-              </Sidebar.Item>
-              <Sidebar.Item>
-                <Link to="/sessions">Sessions</Link>
-              </Sidebar.Item>
-              <Sidebar.Item>
-                <Link to="/courses">Courses</Link>
-              </Sidebar.Item>
-              <Sidebar.Item>Session Courses</Sidebar.Item>
-              <Sidebar.Item>Students</Sidebar.Item>
-              <Sidebar.Item>Student Enrolments</Sidebar.Item>
-            </Sidebar.Collapse>
-          )}
-          <Sidebar.Item href="#" icon={HiInbox} label="3">
-            Inbox
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiUser}>
-            Users
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
-            Products
-          </Sidebar.Item>
-          <Sidebar.Item icon={HiTable} onClick={handleSignOut}>
-            <span className="cursor-pointer">Sign Out</span>
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
+    <Sider width={200} className="site-layout-background">
+      <Menu
+        mode="inline"
+        selectedKeys={[location.pathname]}
+        defaultOpenKeys={["sub1"]}
+        style={{ height: "100%", borderRight: 0 }}
+      >
+        <Menu.Item key="/" icon={<PieChartOutlined />}>
+          <Link to="/">Dashboard</Link>
+        </Menu.Item>
+
+        {currentUser && currentUser.role === "admin" && (
+          <SubMenu key="sub1" icon={<UserOutlined />} title="Details">
+            <Menu.Item key="/faculties">
+              <Link to="/faculties">Faculties</Link>
+            </Menu.Item>
+            <Menu.Item key="/departments">
+              <Link to="/departments">Departments</Link>
+            </Menu.Item>
+            <Menu.Item key="/teachers">
+              <Link to="/teachers">Teachers</Link>
+            </Menu.Item>
+            <Menu.Item key="/sessions">
+              <Link to="/sessions">Sessions</Link>
+            </Menu.Item>
+            <Menu.Item key="/courses">
+              <Link to="/courses">Courses</Link>
+            </Menu.Item>
+            <Menu.Item key="8">Session Courses</Menu.Item>
+            <Menu.Item key="9">Students</Menu.Item>
+            <Menu.Item key="10">Student Enrolments</Menu.Item>
+          </SubMenu>
+        )}
+
+        <Menu.Item key="/inbox" icon={<InboxOutlined />}>
+          <Link to="/inbox">Inbox</Link>
+        </Menu.Item>
+
+        <Menu.Item key="/users" icon={<ShoppingOutlined />}>
+          <Link to="/users">Users</Link>
+        </Menu.Item>
+
+        <Menu.Item key="/products" icon={<TableOutlined />}>
+          <Link to="/products">Products</Link>
+        </Menu.Item>
+
+        <Menu.Item
+          key="signout"
+          icon={<UserOutlined />}
+          onClick={handleSignOut}
+        >
+          Sign Out
+        </Menu.Item>
+      </Menu>
+    </Sider>
   );
-}
+};
+
+export default Sidebar;
