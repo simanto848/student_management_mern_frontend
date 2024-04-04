@@ -1,51 +1,76 @@
 import { useState, useEffect } from "react";
-import { Button, Table, Modal, Typography } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Table, Modal, Form, Input, message } from "antd";
 import { Link } from "react-router-dom";
+import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import {
-  fetchFaculties,
+  updateFaculty,
   deleteFaculty,
+  fetchFaculties,
 } from "../../../services/FacultyService";
 import toast, { Toaster } from "react-hot-toast";
-
-const { Text } = Typography;
 
 export default function Faculties() {
   const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [facultyToDelete, setFacultyToDelete] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingFaculty, setEditingFaculty] = useState(null);
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const facultiesData = await fetchFaculties();
-        setFaculties(facultiesData);
-      } catch (error) {
-        toast.error("Failed to fetch faculties");
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchData();
   }, []);
 
-  const handleDelete = async () => {
-    if (!facultyToDelete) return;
+  const fetchData = async () => {
     try {
-      await deleteFaculty(facultyToDelete._id);
+      setLoading(true);
+      const facultiesData = await fetchFaculties();
+      setFaculties(facultiesData);
+    } catch (error) {
+      toast.error("Failed to fetch faculties");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (faculty) => {
+    setEditingFaculty(faculty);
+    form.setFieldsValue({
+      name: faculty.name,
+    });
+    setEditModalVisible(true);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const values = await form.validateFields();
+      const updated = await updateFaculty(editingFaculty._id, values.name);
+      if (updated) {
+        message.success("Faculty updated successfully");
+        setEditModalVisible(false);
+        fetchData();
+      }
+    } catch (error) {
+      message.error("Failed to update faculty");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleDelete = async (facultyId) => {
+    try {
+      await deleteFaculty(facultyId);
       setFaculties((prevFaculties) =>
-        prevFaculties.filter((faculty) => faculty._id !== facultyToDelete._id)
+        prevFaculties.filter((faculty) => faculty._id !== facultyId)
       );
       toast.success("Faculty deleted successfully");
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete faculty");
-    } finally {
-      setDeleteModalVisible(false);
     }
   };
 
@@ -72,16 +97,15 @@ export default function Faculties() {
       key: "actions",
       render: (_, record) => (
         <div>
-          <Link to={`/update-faculty/${record._id}`}>
-            <Button icon={<EditOutlined />} size="small" />
-          </Link>
+          <Button
+            icon={<EditOutlined />}
+            size="small"
+            onClick={() => handleEdit(record)}
+          />
           <Button
             icon={<DeleteOutlined />}
             size="small"
-            onClick={() => {
-              setFacultyToDelete(record);
-              setDeleteModalVisible(true);
-            }}
+            onClick={() => handleDelete(record._id)}
           />
         </div>
       ),
@@ -113,17 +137,25 @@ export default function Faculties() {
       </div>
 
       <Modal
-        title="Delete Faculty"
-        open={deleteModalVisible}
-        onCancel={() => setDeleteModalVisible(false)}
-        onOk={handleDelete}
-        okText="Confirm"
-        cancelText="Cancel"
+        title="Edit Faculty"
+        visible={editModalVisible}
+        onCancel={handleCancelEdit}
+        onOk={handleUpdate}
       >
-        <Text>
-          Are you sure you want to delete faculty &quot;{facultyToDelete?.name}
-          &quot;?
-        </Text>
+        <Form form={form} layout="vertical">
+          <Form.Item
+            label="Faculty Name"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "Please input faculty name!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

@@ -5,10 +5,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Faculties from "./pages/Admin/Faculties/Faculties";
 import CreateFaculty from "./pages/Admin/Faculties/CreateFaculty";
-import UpdateFaculty from "./pages/Admin/Faculties/UpdateFaculty";
-import Departments from "./pages/Departments";
-import CreateDepartment from "./pages/CreateDepartment";
-import UpdateDepartment from "./pages/UpdateDepartment";
+// import UpdateFaculty from "./pages/Admin/Faculties/UpdateFaculty";
+import Departments from "./pages/Admin/Departments/Departments";
+import CreateDepartment from "./pages/Admin/Departments/CreateDepartment";
 import Teachers from "./pages/Teachers";
 import CreateTeacher from "./pages/CreateTeacher";
 import UpdateTeacher from "./pages/UpdateTeacher";
@@ -38,17 +37,11 @@ export const App = () => {
           {/* FACULTIES ROUTES */}
           <Route path="/faculties" element={<Faculties />} />
           <Route path="/create-faculty" element={<CreateFaculty />} />
-          <Route
-            path="/update-faculty/:facultyId"
-            element={<UpdateFaculty />}
-          />
+
           {/* DEPARTMENT ROUTES */}
           <Route path="/departments" element={<Departments />} />
           <Route path="/create-department" element={<CreateDepartment />} />
-          <Route
-            path="/update-department/:departmentId"
-            element={<UpdateDepartment />}
-          />
+
           {/* Teacher Routes */}
           <Route path="/teachers" element={<Teachers />} />
           <Route path="/create-teacher" element={<CreateTeacher />} />
@@ -56,6 +49,7 @@ export const App = () => {
             path="/update-teacher/:teacherId"
             element={<UpdateTeacher />}
           />
+
           {/* Session Routes */}
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/create-session" element={<CreateSession />} />

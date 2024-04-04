@@ -43,7 +43,7 @@ export const updateFaculty = async (facultyId, name) => {
     if (!res.ok) {
       throw new Error(data.message);
     }
-    return data.faculty;
+    return data;
   } catch (error) {
     throw new Error("Failed to update faculty");
   }
