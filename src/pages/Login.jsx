@@ -1,13 +1,12 @@
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import { Button, Label, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { singInStart, signInSuccess } from "../redux/user/userSlice";
+import { Toaster } from "react-hot-toast";
+import { login } from "../services/AuthService";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -16,30 +15,12 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      return toast.error("Please fill out all fields.");
-    }
-    try {
-      dispatch(singInStart());
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        return toast.error(data.message);
-      }
-      dispatch(signInSuccess(data));
-      navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+    login(formData, navigate);
   };
 
   return (
     <div className="min-h-screen mt-20">
+      <Toaster position="top-right" />
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1">
@@ -55,7 +36,6 @@ export default function Login() {
         </div>
 
         {/* right */}
-        <Toaster />
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>

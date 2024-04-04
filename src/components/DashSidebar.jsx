@@ -6,13 +6,14 @@ import {
   HiTable,
   HiUser,
 } from "react-icons/hi";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { signOutSuccess } from "../redux/user/userSlice";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import toast, { Toaster } from "react-hot-toast";
+import { getUserFromCookie } from "../services/Cookies";
 
 export default function DashSidebar() {
-  const { currentUser } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const currentUser = getUserFromCookie("user");
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -23,14 +24,17 @@ export default function DashSidebar() {
       if (!res.ok) {
         console.log(data.message);
       }
-      dispatch(signOutSuccess());
+      Cookies.remove("user");
+      navigate("/");
     } catch (error) {
       console.log(error.message);
+      return toast.error(error.message);
     }
   };
 
   return (
     <Sidebar aria-label="Default sidebar example">
+      <Toaster position="top-right" />
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item
