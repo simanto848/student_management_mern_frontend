@@ -1,61 +1,56 @@
-import { Button, FloatingLabel } from "flowbite-react";
-import DashSidebar from "../components/DashSidebar";
+import { Button, Input } from "antd";
+import DashSidebar from "../../../components/DashSidebar";
 import { useState } from "react";
+import { addFaculty } from "../../../services/FacultyService";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function CreateFaculty() {
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) {
-      return toast.error("Name is required");
+      return toast.error("Faculty name is required");
     }
     try {
-      const res = await fetch("/api/faculty/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        return toast.error(data.message);
-      }
-      toast.success(`Faculty ${name} added successfully`);
+      setLoading(true);
+      await addFaculty(name);
+      setLoading(false);
+      setName("");
+      navigate("/faculties");
     } catch (error) {
-      console.log(error);
-      return toast.error("Something went wrong");
+      console.error(error);
+      setLoading(false);
     }
-    setName("");
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <DashSidebar />
+      <Toaster position="top-right" />
       <div className="overflow-x-auto flex-1 p-4">
-        <Toaster position="top-right" reverseOrder={false} />
         <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
           Add Faculty
         </h1>
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           <div className="mb-4">
-            <FloatingLabel
+            <Input
               type="text"
               id="name"
-              variant="outlined"
-              label="Faculty Name"
+              placeholder="Faculty Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <Button
-            type="submit"
-            size="lg"
-            outline
-            gradientDuoTone="tealToLime"
-            className="w-full"
+            type="primary"
+            htmlType="submit"
+            size="large"
+            loading={loading}
+            className="text-black border-gray-200"
           >
             Add
           </Button>
