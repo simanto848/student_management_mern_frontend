@@ -3,9 +3,9 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Faculties from "./pages/Faculties";
-import CreateFaculty from "./pages/CreateFaculty";
-import UpdateFaculty from "./pages/UpdateFaculty";
+import Faculties from "./pages/Admin/Faculties/Faculties";
+import CreateFaculty from "./pages/Admin/Faculties/CreateFaculty";
+import UpdateFaculty from "./pages/Admin/Faculties/UpdateFaculty";
 import Departments from "./pages/Departments";
 import CreateDepartment from "./pages/CreateDepartment";
 import UpdateDepartment from "./pages/UpdateDepartment";
@@ -18,43 +18,55 @@ import UpdateSession from "./pages/UpdateSession";
 import Courses from "./pages/Courses";
 import CreateCourse from "./pages/CreateCourse";
 import UpdateCourse from "./pages/UpdateCourse";
+import PrivateRoutes from "./components/PrivateRoutes";
+import OnlyAdminRoutes from "./components/OnlyAdminRoutes";
+import CheckLoginStatus from "./components/CheckLoginStatus";
 
 export const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Login />} />
-        {/*  Start Private Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        {/*  End Private Routes */}
+        <Route element={<CheckLoginStatus />}>
+          <Route path="/" element={<Login />} />
+        </Route>
+        <Route element={<PrivateRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
 
-        {/* START ADMIN ROUTES */}
-
-        {/* FACULTIES ROUTES */}
-        <Route path="/faculties" element={<Faculties />} />
-        <Route path="/create-faculty" element={<CreateFaculty />} />
-        <Route path="/update-faculty/:facultyId" element={<UpdateFaculty />} />
-        {/* DEPARTMENT ROUTES */}
-        <Route path="/departments" element={<Departments />} />
-        <Route path="/create-department" element={<CreateDepartment />} />
-        <Route
-          path="/update-department/:departmentId"
-          element={<UpdateDepartment />}
-        />
-        {/* Teacher Routes */}
-        <Route path="/teachers" element={<Teachers />} />
-        <Route path="/create-teacher" element={<CreateTeacher />} />
-        <Route path="/update-teacher/:teacherId" element={<UpdateTeacher />} />
-        {/* Session Routes */}
-        <Route path="/sessions" element={<Sessions />} />
-        <Route path="/create-session" element={<CreateSession />} />
-        <Route path="/update-session/:sessionId" element={<UpdateSession />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/create-course" element={<CreateCourse />} />
-        <Route path="/update-course/:courseId" element={<UpdateCourse />} />
-
-        {/* END ADMIN ROUTES */}
+        <Route element={<OnlyAdminRoutes />}>
+          {/* FACULTIES ROUTES */}
+          <Route path="/faculties" element={<Faculties />} />
+          <Route path="/create-faculty" element={<CreateFaculty />} />
+          <Route
+            path="/update-faculty/:facultyId"
+            element={<UpdateFaculty />}
+          />
+          {/* DEPARTMENT ROUTES */}
+          <Route path="/departments" element={<Departments />} />
+          <Route path="/create-department" element={<CreateDepartment />} />
+          <Route
+            path="/update-department/:departmentId"
+            element={<UpdateDepartment />}
+          />
+          {/* Teacher Routes */}
+          <Route path="/teachers" element={<Teachers />} />
+          <Route path="/create-teacher" element={<CreateTeacher />} />
+          <Route
+            path="/update-teacher/:teacherId"
+            element={<UpdateTeacher />}
+          />
+          {/* Session Routes */}
+          <Route path="/sessions" element={<Sessions />} />
+          <Route path="/create-session" element={<CreateSession />} />
+          <Route
+            path="/update-session/:sessionId"
+            element={<UpdateSession />}
+          />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/create-course" element={<CreateCourse />} />
+          <Route path="/update-course/:courseId" element={<UpdateCourse />} />
+        </Route>
       </Routes>
       <Footer />
     </BrowserRouter>
