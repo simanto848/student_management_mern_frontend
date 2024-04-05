@@ -89,3 +89,17 @@ export async function updateDepartment(departmentId, formData) {
     return null;
   }
 }
+
+export async function fetchDepartmentsByFaculty(facultyId) {
+  try {
+    const res = await fetch(`/api/department/faculty/${facultyId}`);
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+    return { ok: true, data };
+  } catch (error) {
+    message.error("Failed to fetch departments");
+    return [];
+  }
+}
