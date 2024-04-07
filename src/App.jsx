@@ -10,9 +10,8 @@ import CreateDepartment from "./pages/Admin/Departments/CreateDepartment";
 import Teachers from "./pages/Admin/Teachers/Teachers";
 import CreateTeacher from "./pages/Admin/Teachers/CreateTeacher";
 import UpdateTeacher from "./pages/Admin/Teachers/UpdateTeacher";
-import Sessions from "./pages/Sessions";
-import CreateSession from "./pages/CreateSession";
-import UpdateSession from "./pages/UpdateSession";
+import Sessions from "./pages/Admin/Sessions/Sessions";
+import CreateSession from "./pages/Admin/Sessions/CreateSession";
 import Courses from "./pages/Courses";
 import CreateCourse from "./pages/CreateCourse";
 import UpdateCourse from "./pages/UpdateCourse";
@@ -52,10 +51,8 @@ export const App = () => {
           {/* Session Routes */}
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/create-session" element={<CreateSession />} />
-          <Route
-            path="/update-session/:sessionId"
-            element={<UpdateSession />}
-          />
+
+          {/* Course Routes */}
           <Route path="/courses" element={<Courses />} />
           <Route path="/create-course" element={<CreateCourse />} />
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
