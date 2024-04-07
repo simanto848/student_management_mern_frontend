@@ -18,6 +18,7 @@ import UpdateCourse from "./pages/Admin/Courses/UpdateCourse";
 import PrivateRoutes from "./components/PrivateRoutes";
 import OnlyAdminRoutes from "./components/OnlyAdminRoutes";
 import CheckLoginStatus from "./components/CheckLoginStatus";
+import NotFound from "./pages/NotFound";
 
 export const App = () => {
   return (
@@ -57,6 +58,7 @@ export const App = () => {
           <Route path="/create-course" element={<CreateCourse />} />
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>
