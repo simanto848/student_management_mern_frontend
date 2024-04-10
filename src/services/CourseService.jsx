@@ -34,6 +34,15 @@ export async function fetchCourseById(courseId) {
   return response.json();
 }
 
+export async function fetchCoursesByDepartment(departmentId) {
+  const response = await fetch(`${BASE_URL}/department/${departmentId}`);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error("Failed to fetch courses");
+  }
+  return data;
+}
+
 export async function updateCourse(courseId, formData) {
   const response = await fetch(`${BASE_URL}/update/${courseId}`, {
     method: "PUT",

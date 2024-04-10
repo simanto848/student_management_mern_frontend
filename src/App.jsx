@@ -19,6 +19,8 @@ import PrivateRoutes from "./components/PrivateRoutes";
 import OnlyAdminRoutes from "./components/OnlyAdminRoutes";
 import CheckLoginStatus from "./components/CheckLoginStatus";
 import NotFound from "./pages/NotFound";
+import SessionCourse from "./pages/Admin/Session Courses/SessionCourse";
+import CreateSessionCourse from "./pages/Admin/Session Courses/CreateSessionCourse";
 
 export const App = () => {
   return (
@@ -57,6 +59,13 @@ export const App = () => {
           <Route path="/courses" element={<Courses />} />
           <Route path="/create-course" element={<CreateCourse />} />
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
+
+          {/* Session Course */}
+          <Route path="/session-courses" element={<SessionCourse />} />
+          <Route
+            path="/create-session-course"
+            element={<CreateSessionCourse />}
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
