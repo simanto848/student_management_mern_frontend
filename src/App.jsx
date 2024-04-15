@@ -21,6 +21,8 @@ import CheckLoginStatus from "./components/CheckLoginStatus";
 import NotFound from "./pages/NotFound";
 import SessionCourse from "./pages/Admin/Session Courses/SessionCourse";
 import CreateSessionCourse from "./pages/Admin/Session Courses/CreateSessionCourse";
+import StudenList from "./pages/Admin/Students/StudenList";
+import AddStudent from "./pages/Admin/Students/AddStudent";
 
 export const App = () => {
   return (
@@ -66,6 +68,10 @@ export const App = () => {
             path="/create-session-course"
             element={<CreateSessionCourse />}
           />
+
+          {/* Student Routes */}
+          <Route path="/admin/students" element={<StudenList />} />
+          <Route path="/admin/add/student" element={<AddStudent />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

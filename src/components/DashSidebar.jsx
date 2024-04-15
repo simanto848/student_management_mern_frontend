@@ -54,7 +54,9 @@ const Sidebar = () => {
             <Menu.Item key="/session-courses">
               <Link to="/session-courses">Session Courses</Link>
             </Menu.Item>
-            <Menu.Item key="9">Students</Menu.Item>
+            <Menu.Item key="/admin/students">
+              <Link to="/admin/students">Students</Link>
+            </Menu.Item>
             <Menu.Item key="10">Student Enrolments</Menu.Item>
           </SubMenu>
         )}
