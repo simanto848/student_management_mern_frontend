@@ -20,6 +20,7 @@ export default function SessionCourse() {
       if (response.length > 0) {
         setSessionCourses(response);
       } else {
+        setSessionCourses([]);
         message.error(response.message || "No session courses found");
       }
     } catch (error) {
