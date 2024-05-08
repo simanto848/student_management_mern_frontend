@@ -38,14 +38,13 @@ export default function AddStudent() {
 
   const onFinish = async (formData) => {
     try {
-      console.log("Form Data: ", formData);
       const res = await createStudent(formData);
-      if (res.ok) {
+      if (res) {
         message.success("Student added successfully");
         form.resetFields();
         navigate("/admin/students");
       } else {
-        message.error(res.message || "Failed to add student");
+        message.error("Failed to add student");
       }
     } catch (error) {
       console.log(error);
