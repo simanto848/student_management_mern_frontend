@@ -3,7 +3,10 @@ import React, { useState, useEffect } from "react";
 import { Button, message, Select, Input, Form, Space } from "antd";
 import DashSidebar from "../../../components/DashSidebar";
 import { useParams } from "react-router-dom";
-import { fetchTeacherById, updateTeacher } from "../../../services/TeacherService";
+import {
+  fetchTeacherById,
+  updateTeacher,
+} from "../../../services/TeacherService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
 

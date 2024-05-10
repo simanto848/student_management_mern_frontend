@@ -11,12 +11,13 @@ export default function AddStudent() {
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchDepartmentsData();
     fetchSessionsData();
-  });
+  }, []);
 
   const fetchDepartmentsData = async () => {
     try {
@@ -37,8 +38,22 @@ export default function AddStudent() {
   };
 
   const onFinish = async (formData) => {
+    setLoading(true);
     try {
-      const res = await createStudent(formData);
+      const { departmentId } = formData;
+      const selectedDepartment = departments.find(
+        (department) => department._id === departmentId
+      );
+      if (!selectedDepartment) {
+        message.error("Department not found");
+        setLoading(false);
+        return;
+      }
+
+      const { shortName } = selectedDepartment;
+      const requestData = { ...formData, departmentShortName: shortName };
+
+      const res = await createStudent(requestData);
       if (res) {
         message.success("Student added successfully");
         form.resetFields();
@@ -49,6 +64,8 @@ export default function AddStudent() {
     } catch (error) {
       console.log(error);
       message.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,18 +100,6 @@ export default function AddStudent() {
               label="Phone Number"
             >
               <Input placeholder="Enter student phone number" />
-            </Form.Item>
-            <Form.Item
-              name="registrationNo"
-              rules={[
-                {
-                  required: true,
-                  message: "Student registration number is required",
-                },
-              ]}
-              label="Registration Number"
-            >
-              <Input placeholder="Enter student registration number" />
             </Form.Item>
             <Form.Item
               name="rollNo"
@@ -155,7 +160,7 @@ export default function AddStudent() {
               <Input placeholder="Enter Course Fee" />
             </Form.Item>
             <Form.Item>
-              <Button className="w-full" htmlType="submit">
+              <Button className="w-full" htmlType="submit" loading={loading}>
                 Add Student
               </Button>
               <Button className="w-full mt-2">
