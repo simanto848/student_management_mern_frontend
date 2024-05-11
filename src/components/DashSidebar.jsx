@@ -48,6 +48,9 @@ const Sidebar = () => {
             <Menu.Item key="/sessions">
               <Link to="/sessions">Sessions</Link>
             </Menu.Item>
+            <Menu.Item key="/batches">
+              <Link to="/batches">Batches</Link>
+            </Menu.Item>
             <Menu.Item key="/courses">
               <Link to="/courses">Courses</Link>
             </Menu.Item>

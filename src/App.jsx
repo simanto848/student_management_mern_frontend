@@ -24,6 +24,8 @@ import CreateSessionCourse from "./pages/Admin/Session Courses/CreateSessionCour
 import StudenList from "./pages/Admin/Students/StudenList";
 import AddStudent from "./pages/Admin/Students/AddStudent";
 import UpdateStudent from "./pages/Admin/Students/UpdateStudent";
+import Batches from "./pages/Admin/Btaches/Batches";
+import CreateBatch from "./pages/Admin/Btaches/CreateBatch";
 
 export const App = () => {
   return (
@@ -57,6 +59,10 @@ export const App = () => {
           {/* Session Routes */}
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/create-session" element={<CreateSession />} />
+
+          {/* Batch Routes */}
+          <Route path="/batches" element={<Batches />} />
+          <Route path="/batch/add" element={<CreateBatch />} />
 
           {/* Course Routes */}
           <Route path="/courses" element={<Courses />} />
