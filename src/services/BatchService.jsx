@@ -33,6 +33,15 @@ export async function fetchBatchById(batchId) {
   return data;
 }
 
+export async function fetchBatchBySessionId(sessionId) {
+  const response = await fetch(`${BASE_URL}/session/${sessionId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch batch");
+  }
+  const data = await response.json();
+  return data;
+}
+
 export async function updateBatch(batchId, batch) {
   const response = await fetch(`${BASE_URL}/${batchId}`, {
     method: "PUT",

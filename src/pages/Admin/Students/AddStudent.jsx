@@ -6,18 +6,27 @@ import DashSidebar from "../../../components/DashSidebar";
 import { fetchDepartments } from "../../../services/DepartmentService";
 import { fetchSessions } from "../../../services/SessionService";
 import { createStudent } from "../../../services/StudentService";
+import { fetchBatchBySessionId } from "../../../services/BatchService";
 
 export default function AddStudent() {
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchDepartmentsData();
     fetchSessionsData();
   }, []);
+
+  useEffect(() => {
+    if (selectedSessionId) {
+      fetchSessionBatches(selectedSessionId);
+    }
+  }, [selectedSessionId]);
 
   const fetchDepartmentsData = async () => {
     try {
@@ -34,6 +43,17 @@ export default function AddStudent() {
       setSessions(data);
     } catch (error) {
       message.error("Failed to fetch sessions");
+    }
+  };
+
+  const fetchSessionBatches = async (sessionId) => {
+    try {
+      const data = await fetchBatchBySessionId(sessionId);
+      console.log(data);
+      setBatches(data);
+    } catch (error) {
+      console.log(error);
+      message.error("Failed to fetch batches");
     }
   };
 
@@ -67,6 +87,10 @@ export default function AddStudent() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSessionChange = (value) => {
+    setSelectedSessionId(value);
   };
 
   return (
@@ -132,7 +156,10 @@ export default function AddStudent() {
               ]}
               label="Select Session"
             >
-              <Select placeholder="Please select Session">
+              <Select
+                placeholder="Please select Session"
+                onChange={handleSessionChange}
+              >
                 {sessions.map((session) => (
                   <Select.Option key={session._id} value={session._id}>
                     {session.session}
@@ -141,15 +168,18 @@ export default function AddStudent() {
               </Select>
             </Form.Item>
             <Form.Item
-              name="semester"
+              name="batchId"
               rules={[
-                { required: true, message: "Semester selection is required" },
+                { required: true, message: "Batch selection is required" },
               ]}
-              label="Select Semester"
+              label="Select Batch"
             >
-              <Select placeholder="Please select Semester">
-                <Select.Option value="1">1st</Select.Option>
-                <Select.Option value="2">2nd</Select.Option>
+              <Select placeholder="Please select Batch">
+                {batches.map((batch) => (
+                  <Select.Option key={batch._id} value={batch._id}>
+                    {batch.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item

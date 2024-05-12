@@ -9,11 +9,14 @@ import {
 } from "../../../services/StudentService";
 import { fetchDepartments } from "../../../services/DepartmentService";
 import { fetchSessions } from "../../../services/SessionService";
+import { fetchBatchBySessionId } from "../../../services/BatchService";
 
 export default function UpdateStudent() {
   const [form] = Form.useForm();
   const [departments, setDepartments] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [batches, setBatches] = useState([]);
+  const [selectedSession, setSelectedSession] = useState(null); // State to store the selected session
 
   const navigate = useNavigate();
   const { studentId } = useParams();
@@ -23,6 +26,12 @@ export default function UpdateStudent() {
     fetchDepartmentsData();
     fetchSessionsData();
   }, [studentId]);
+
+  useEffect(() => {
+    if (selectedSession) {
+      fetchBatchesBySession(selectedSession);
+    }
+  }, [selectedSession]);
 
   const fetchData = async () => {
     try {
@@ -34,6 +43,7 @@ export default function UpdateStudent() {
         rollNo: studentData.rollNo,
         departmentId: studentData.departmentId,
         sessionId: studentData.sessionId,
+        batchId: studentData.batchId.name,
         courseFee: studentData.courseFee,
       });
     } catch (error) {
@@ -59,6 +69,15 @@ export default function UpdateStudent() {
     }
   };
 
+  const fetchBatchesBySession = async (sessionId) => {
+    try {
+      const batchesData = await fetchBatchBySessionId(sessionId);
+      setBatches(batchesData);
+    } catch (error) {
+      message.error("Failed to fetch batches");
+    }
+  };
+
   const onFinish = async (values) => {
     try {
       const res = await updateStudent(studentId, values);
@@ -71,6 +90,11 @@ export default function UpdateStudent() {
     } catch (error) {
       message.error(error.message);
     }
+  };
+
+  const handleSessionChange = (value) => {
+    setSelectedSession(value); // Update the selected session
+    form.setFieldsValue({ batchId: "" }); // Reset batch selection when session changes
   };
 
   return (
@@ -92,7 +116,7 @@ export default function UpdateStudent() {
               rollNo: "",
               departmentId: "",
               sessionId: "",
-              semester: "",
+              batchId: "",
               courseFee: "",
             }}
           >
@@ -150,10 +174,28 @@ export default function UpdateStudent() {
               ]}
               label="Select Session"
             >
-              <Select placeholder="Please select Session">
+              <Select
+                placeholder="Please select Session"
+                onChange={handleSessionChange} // Handle session selection change
+              >
                 {sessions.map((session) => (
                   <Select.Option key={session._id} value={session._id}>
                     {session.session}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="batchId"
+              rules={[
+                { required: true, message: "Batch selection is required" },
+              ]}
+              label="Select Batch"
+            >
+              <Select placeholder="Please select Batch">
+                {batches.map((batch) => (
+                  <Select.Option key={batch._id} value={batch._id}>
+                    {batch.name}
                   </Select.Option>
                 ))}
               </Select>

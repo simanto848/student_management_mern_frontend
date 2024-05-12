@@ -100,10 +100,10 @@ export default function StudenList() {
     registrationNo: student.registrationNo,
     phoneNo: student.phoneNo,
     email: student.email,
-    batchNo: student.batchNo,
+    batchNo: student.batchId.name,
     courseFee: student.courseFee,
     department: student.departmentId.shortName,
-    session: student.sessionId.session,
+    session: student.batchId.sessionId.session,
   }));
 
   return (
