@@ -1,18 +1,27 @@
-import React, { useState } from "react";
-import { Button, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Select, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import DashSidebar from "../../../components/DashSidebar";
 import { createBatch } from "../../../services/BatchService";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchDepartments } from "../../../services/DepartmentService";
 
-const { Item } = Form;
+const { Option } = Select;
 
 export default function CreateBatch() {
+  const [form] = Form.useForm();
   const [batch, setBatch] = useState("");
+  const [departmentId, setDepartmentId] = useState(""); // Updated state variable
+  const [sessionId, setSessionId] = useState(""); // Updated state variable
   const [sessions, setSessions] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchSessionData();
+    fetchDepartmentData();
+  }, []);
 
   const fetchDepartmentData = async () => {
     try {
@@ -32,31 +41,92 @@ export default function CreateBatch() {
     }
   };
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (!batch || !departmentId || !sessionId) {
+      // Updated to use departmentId and sessionId
+      message.error("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+    try {
+      await createBatch({ name: batch, departmentId, sessionId }); // Updated to use departmentId and sessionId
+      message.success(`Batch "${batch}" added successfully`);
+      navigate("/batches");
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to add batch");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
-        <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
-          Add Session
-        </h1>
-        <Form
-          onFinish={handleSubmit}
-          className="max-w-md mx-auto"
-          layout="vertical"
-        >
-          <Item
-            label="Session Name"
-            name="session"
-            rules={[{ required: true, message: "Please enter session name" }]}
+        <div className="max-w-md mx-auto bg-white rounded-lg p-6 shadow-md border-2">
+          <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
+            Add Batch
+          </h1>
+          <Form
+            layout="vertical"
+            className="max-w-md mx-auto"
+            form={form}
+            onFinish={handleSubmit}
           >
-            <Input value={batch} onChange={(e) => setSession(e.target.value)} />
-          </Item>
-          <Item>
-            <Button htmlType="submit" className="w-full">
-              Add
-            </Button>
-          </Item>
-        </Form>
+            <Form.Item
+              name="name"
+              rules={[{ required: true, message: "Batch name is required" }]}
+              label="Batch Name"
+            >
+              <Input
+                placeholder="Enter batch name..."
+                onChange={(e) => setBatch(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="sessionId"
+              rules={[{ required: true, message: "Session is required" }]}
+              label="Select Session"
+            >
+              <Select
+                placeholder="Please select session..."
+                onChange={(value) => setSessionId(value)}
+              >
+                {sessions.map((session) => (
+                  <Select.Option key={session._id} value={session._id}>
+                    {session.session}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="departmentId"
+              rules={[{ required: true, message: "Department is required" }]}
+              label="Select Department"
+            >
+              <Select
+                placeholder="Please select department..."
+                onChange={(value) => setDepartmentId(value)}
+              >
+                {departments.map((department) => (
+                  <Option key={department._id} value={department._id}>
+                    {department.shortName}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button className="w-full" htmlType="submit" loading={loading}>
+                Add Batch
+              </Button>
+              <Button className="w-full mt-2">
+                <Link to="/batches">Cancel</Link>
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
     </div>
   );

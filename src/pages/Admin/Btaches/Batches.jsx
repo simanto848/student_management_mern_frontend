@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import { Button, Table, message, Modal, Form, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Table, message, Modal, Form, Input, Select } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import DashSidebar from "../../../components/DashSidebar";
@@ -10,6 +10,8 @@ import {
   updateBatch,
   deleteBatch,
 } from "../../../services/BatchService";
+import { fetchDepartments } from "../../../services/DepartmentService";
+import { fetchSessions } from "../../../services/SessionService";
 
 const { Column } = Table;
 const { Item } = Form;
@@ -18,7 +20,36 @@ export default function Batches() {
   const [batches, setBatches] = useState([]);
   const [visible, setVisible] = useState(false);
   const [batchToUpdate, setBatchToUpdate] = useState({});
+  const [departments, setDepartments] = useState([]);
+  const [sessions, setSessions] = useState([]);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    fetchBatchData();
+  }, []);
+
+  useEffect(() => {
+    fetchDepartmentData();
+    fetchSessionData();
+  }, []);
+
+  const fetchDepartmentData = async () => {
+    try {
+      const data = await fetchDepartments();
+      setDepartments(data);
+    } catch (error) {
+      message.error("Failed to fetch departments!");
+    }
+  };
+
+  const fetchSessionData = async () => {
+    try {
+      const data = await fetchSessions();
+      setSessions(data);
+    } catch (error) {
+      message.error("Failed to fetch sessions!");
+    }
+  };
 
   const fetchBatchData = async () => {
     try {
@@ -43,8 +74,8 @@ export default function Batches() {
   const handleUpdate = async () => {
     try {
       const values = await form.validateFields();
-      await updateBatch(batchToUpdate._id, values.batch);
-      message.success(`Batch "${values.batch}" updated successfully`);
+      await updateBatch(batchToUpdate._id, values);
+      message.success(`Batch "${values.name}" updated successfully`);
       setVisible(false);
       form.resetFields();
       fetchBatchData();
@@ -61,7 +92,6 @@ export default function Batches() {
       );
       message.success("Session deleted successfully");
     } catch (error) {
-      console.error(error);
       message.error("Failed to delete session!");
     }
   };
@@ -75,7 +105,7 @@ export default function Batches() {
             Batch List
           </h1>
           <Button className="mr-2">
-            <Link to="/create-session">Add Batch</Link>
+            <Link to="/batch/add">Add Batch</Link>
           </Button>
         </div>
         <Table dataSource={batches} rowKey="_id">
@@ -85,7 +115,13 @@ export default function Batches() {
             key="index"
             render={(text, record, index) => index + 1}
           />
-          <Column title="Batch" dataIndex="batch" key="batch" />
+          <Column title="Batch" dataIndex="name" key="name" />
+          <Column
+            title="Department"
+            dataIndex="departmentName"
+            key="departmentShortName"
+          />
+          <Column title="Session" dataIndex="session" key="session" />
           <Column
             title="Created at"
             dataIndex="createdAt"
@@ -111,6 +147,7 @@ export default function Batches() {
             )}
           />
         </Table>
+
         <Modal
           title="Edit Batch"
           open={visible}
@@ -124,13 +161,31 @@ export default function Batches() {
             </Button>,
           ]}
         >
-          <Form form={form}>
+          <Form form={form} layout="vertical">
             <Item
               label="Batch"
-              name="bacth"
+              name="name"
               rules={[{ required: true, message: "Please enter batch" }]}
             >
               <Input />
+            </Item>
+            <Item label="Department" name="departmentId">
+              <Select>
+                {departments.map((department) => (
+                  <Select.Option key={department._id} value={department._id}>
+                    {department.shortName}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Item>
+            <Item label="Session" name="sessionId">
+              <Select>
+                {sessions.map((session) => (
+                  <Select.Option key={session._id} value={session._id}>
+                    {session.session}
+                  </Select.Option>
+                ))}
+              </Select>
             </Item>
           </Form>
         </Modal>
