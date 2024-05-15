@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Select, message } from "antd";
 import DashSidebar from "../../../components/DashSidebar";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchCourseById, updateCourse } from "../../../services/CourseService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
@@ -14,7 +14,9 @@ const UpdateCourse = () => {
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedFacultyId, setSelectedFacultyId] = useState("");
+
   const { courseId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +32,7 @@ const UpdateCourse = () => {
           maintainable: courseData.maintainable,
         });
 
-        setSelectedFacultyId(courseData.facultyId);
+        setSelectedFacultyId(courseData.departmentId.facultyId);
 
         const facultiesData = await fetchFaculties();
         setFaculties(facultiesData);
@@ -67,6 +69,7 @@ const UpdateCourse = () => {
         throw new Error(data.message || "Failed to update course");
       }
       message.success("Course updated successfully");
+      navigate("/courses");
     } catch (error) {
       message.error(error.message);
     }
@@ -121,7 +124,7 @@ const UpdateCourse = () => {
               rules={[{ required: true, message: "Please select semester" }]}
             >
               <Select placeholder="Select Semester">
-                {["Spring", "Fall", "Summer"].map((semester) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((semester) => (
                   <Option key={semester} value={semester}>
                     {semester}
                   </Option>
@@ -173,7 +176,12 @@ const UpdateCourse = () => {
               </Select>
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit">Update Course</Button>
+              <Button className="w-full" htmlType="submit">
+                Update Course
+              </Button>
+              <Button className="w-full mt-2">
+                <Link to="/courses">Cancel</Link>
+              </Button>
             </Form.Item>
           </Form>
         </div>

@@ -58,10 +58,12 @@ export default function Courses() {
     {
       title: "Semester",
       dataIndex: "semester",
+      render: (semester) => `Semester ${semester}`, // Format semester correctly
     },
     {
       title: "Department",
       dataIndex: ["departmentId", "shortName"],
+      render: (text, record) => record.departmentId?.shortName || "N/A", // Handle possible null values
     },
     {
       title: "Maintainable",
@@ -78,11 +80,15 @@ export default function Courses() {
       render: (text, record) => (
         <span>
           <Link to={`/update-course/${record._id}`}>
-            <Button size="small">
+            <Button size="small" className="mr-2">
               <EditOutlined />
             </Button>
           </Link>
-          <Button size="small" onClick={() => handleDelete(record._id)}>
+          <Button
+            size="small"
+            onClick={() => handleDelete(record._id)}
+            danger
+          >
             <DeleteOutlined />
           </Button>
         </span>
