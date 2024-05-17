@@ -7,7 +7,7 @@ import { EditOutlined } from "@ant-design/icons";
 import DashSidebar from "../../../components/DashSidebar";
 import { fetchStudents, deleteStudent } from "../../../services/StudentService";
 
-export default function StudenList() {
+export default function StudentList() {
   const [students, setStudents] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deletingStudentId, setDeletingStudentId] = useState(null);
@@ -20,6 +20,7 @@ export default function StudenList() {
   const fetchData = async () => {
     try {
       const studentData = await fetchStudents();
+      console.log(studentData);
       setStudents(studentData);
     } catch (error) {
       message.error("Failed to fetch data!");
@@ -57,21 +58,78 @@ export default function StudenList() {
     setSearchQuery(value);
   };
 
+  const highlightText = (text, query) => {
+    if (!query) return text;
+    const parts = text.toString().split(new RegExp(`(${query})`, "gi"));
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
   const columns = [
     { title: "SL", dataIndex: "index", key: "index" },
-    { title: "Student Name", dataIndex: "name", key: "name" },
-    { title: "Roll No", dataIndex: "rollNo", key: "rollNo" },
+    {
+      title: "Student Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Roll No",
+      dataIndex: "rollNo",
+      key: "rollNo",
+    },
     {
       title: "Registration No",
       dataIndex: "registrationNo",
       key: "registrationNo",
+      render: (text) => highlightText(text, searchQuery),
     },
-    { title: "Phone No", dataIndex: "phoneNo", key: "phoneNo" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Batch No", dataIndex: "batchNo", key: "batchNo" },
-    { title: "Course Fee", dataIndex: "courseFee", key: "courseFee" },
-    { title: "Department", dataIndex: "department", key: "department" },
-    { title: "Session", dataIndex: "session", key: "session" },
+    {
+      title: "Phone No",
+      dataIndex: "phoneNo",
+      key: "phoneNo",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Batch No",
+      dataIndex: "batchNo",
+      key: "batchNo",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Course Fee",
+      dataIndex: "courseFee",
+      key: "courseFee",
+    },
+    {
+      title: "Scholarship Amount",
+      dataIndex: "scholarshipAmount",
+      key: "scholarshipAmount",
+    },
+    {
+      title: "Semester Fee",
+      dataIndex: "semesterFee",
+      key: "semesterFee",
+    },
+    {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Session",
+      dataIndex: "session",
+      key: "session",
+      render: (text) => highlightText(text, searchQuery),
+    },
     {
       title: "Action",
       dataIndex: "action",
@@ -92,16 +150,30 @@ export default function StudenList() {
     },
   ];
 
-  const data = students.map((student, index) => ({
+  const filteredStudents = students.filter((student) =>
+    [
+      "name",
+      "registrationNo",
+      "phoneNo",
+      "batchNo",
+      "department",
+      "session",
+    ].some((key) =>
+      student[key]?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
+  const data = filteredStudents.map((student, index) => ({
     key: student._id,
     index: index + 1,
     name: student.name,
     rollNo: student.rollNo,
     registrationNo: student.registrationNo,
     phoneNo: student.phoneNo,
-    email: student.email,
     batchNo: student.batchId.name,
-    courseFee: student.courseFee,
+    courseFee: `${student.courseFee} tk`,
+    scholarshipAmount: `${student.scholarship} tk`,
+    semesterFee: `${student.semesterFee} tk`,
     department: student.departmentId.shortName,
     session: student.batchId.sessionId.session,
   }));
@@ -138,7 +210,7 @@ export default function StudenList() {
           okText="Delete"
           cancelText="Cancel"
         >
-          <p>Are you sure you want to delete this teacher?</p>
+          <p>Are you sure you want to delete this student?</p>
         </Modal>
       </div>
     </div>

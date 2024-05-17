@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { Form, Select, Button, message, Input } from "antd";
+import { Form, Select, Button, message, Input, InputNumber } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import DashSidebar from "../../../components/DashSidebar";
 import { fetchDepartments } from "../../../services/DepartmentService";
@@ -71,7 +71,10 @@ export default function AddStudent() {
       }
 
       const { shortName } = selectedDepartment;
-      const requestData = { ...formData, departmentShortName: shortName };
+      const requestData = {
+        ...formData,
+        departmentShortName: shortName,
+      };
 
       const res = await createStudent(requestData);
       if (res) {
@@ -187,7 +190,29 @@ export default function AddStudent() {
               rules={[{ required: true, message: "Course Fee is required" }]}
               label="Course Fee"
             >
-              <Input placeholder="Enter Course Fee" />
+              <InputNumber
+                placeholder="Enter Course Fee"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+            <Form.Item
+              name="scholarship"
+              rules={[
+                {
+                  required: true,
+                  message: "Scholarship percentage is required",
+                },
+              ]}
+              label="Scholarship Percentage"
+            >
+              <InputNumber
+                placeholder="Enter Scholarship Percentage"
+                min={0}
+                max={100}
+                formatter={(value) => `${value}%`}
+                parser={(value) => value.replace("%", "")}
+                style={{ width: "100%" }}
+              />
             </Form.Item>
             <Form.Item>
               <Button className="w-full" htmlType="submit" loading={loading}>
