@@ -1,20 +1,52 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
-import { Button, Label, TextInput } from "flowbite-react";
+import React, { useState, useEffect } from "react";
+import { Button, Label, TextInput, Checkbox } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { login } from "../services/AuthService";
 
 export default function Login() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const savedCredentials = localStorage.getItem("credentials");
+    if (savedCredentials) {
+      const parsedCredentials = JSON.parse(savedCredentials);
+      setFormData({
+        ...formData,
+        email: parsedCredentials.email,
+        password: parsedCredentials.password,
+        rememberMe: true,
+      });
+    }
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    const { id, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [id]: type === "checkbox" ? checked : value.trim(),
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.rememberMe) {
+      localStorage.setItem(
+        "credentials",
+        JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        })
+      );
+    } else {
+      localStorage.removeItem("credentials");
+    }
     login(formData, navigate);
   };
 
@@ -44,6 +76,7 @@ export default function Login() {
                 type="email"
                 placeholder="email"
                 id="email"
+                value={formData.email}
                 onChange={handleChange}
               />
             </div>
@@ -53,8 +86,17 @@ export default function Login() {
                 type="password"
                 placeholder="************"
                 id="password"
+                value={formData.password}
                 onChange={handleChange}
               />
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+              />
+              <Label htmlFor="rememberMe">Remember Me</Label>
             </div>
             <Button gradientDuoTone="purpleToPink" type="submit">
               Sign In
