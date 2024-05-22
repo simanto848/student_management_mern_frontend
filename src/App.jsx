@@ -26,6 +26,7 @@ import AddStudent from "./pages/Admin/Students/AddStudent";
 import UpdateStudent from "./pages/Admin/Students/UpdateStudent";
 import Batches from "./pages/Admin/Btaches/Batches";
 import CreateBatch from "./pages/Admin/Btaches/CreateBatch";
+import Enrollemt from "./pages/Admin/Student Enrolments/Enrollemt";
 
 export const App = () => {
   return (
@@ -43,11 +44,9 @@ export const App = () => {
           {/* FACULTIES ROUTES */}
           <Route path="/faculties" element={<Faculties />} />
           <Route path="/create-faculty" element={<CreateFaculty />} />
-
           {/* DEPARTMENT ROUTES */}
           <Route path="/departments" element={<Departments />} />
           <Route path="/create-department" element={<CreateDepartment />} />
-
           {/* Teacher Routes */}
           <Route path="/teachers" element={<Teachers />} />
           <Route path="/create-teacher" element={<CreateTeacher />} />
@@ -55,27 +54,22 @@ export const App = () => {
             path="/update-teacher/:teacherId"
             element={<UpdateTeacher />}
           />
-
           {/* Session Routes */}
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/create-session" element={<CreateSession />} />
-
           {/* Batch Routes */}
           <Route path="/batches" element={<Batches />} />
           <Route path="/batch/add" element={<CreateBatch />} />
-
           {/* Course Routes */}
           <Route path="/courses" element={<Courses />} />
           <Route path="/create-course" element={<CreateCourse />} />
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
-
           {/* Session Course */}
           <Route path="/session-courses" element={<SessionCourse />} />
           <Route
             path="/create-session-course"
             element={<CreateSessionCourse />}
           />
-
           {/* Student Routes */}
           <Route path="/admin/students" element={<StudenList />} />
           <Route path="/admin/add/student" element={<AddStudent />} />
@@ -83,6 +77,9 @@ export const App = () => {
             path="/admin/update/student/:studentId"
             element={<UpdateStudent />}
           />
+
+          {/* Student Enrollment */}
+          <Route path="/admin/student-enrolments" element={<Enrollemt />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

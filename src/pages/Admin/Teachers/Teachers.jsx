@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Button, message, Table, Modal } from "antd";
+import { Button, message, Table } from "antd";
 import { Link } from "react-router-dom";
 import { HiTrash } from "react-icons/hi";
 import { EditOutlined } from "@ant-design/icons";
 import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import { deleteTeacher, fetchTeachers } from "../../../services/TeacherService";
+import DeleteModal from "../../../components/DeleteModal";
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState([]);
@@ -26,13 +27,9 @@ export default function Teachers() {
     }
   };
 
-  const handleDelete = async (teacherId) => {
-    try {
-      setDeletingTeacherId(teacherId);
-      setDeleteModalVisible(true);
-    } catch (error) {
-      message.error("Failed to delete teacher");
-    }
+  const handleDelete = (teacherId) => {
+    setDeletingTeacherId(teacherId);
+    setDeleteModalVisible(true);
   };
 
   const confirmDelete = async () => {
@@ -122,16 +119,11 @@ export default function Teachers() {
           </Button>
         </div>
         <Table columns={columns} dataSource={data} />
-        <Modal
-          title="Confirm Delete"
-          open={deleteModalVisible}
-          onOk={confirmDelete}
-          onCancel={handleCancelDelete}
-          okText="Delete"
-          cancelText="Cancel"
-        >
-          <p>Are you sure you want to delete this teacher?</p>
-        </Modal>
+        <DeleteModal
+          visible={deleteModalVisible}
+          onClose={handleCancelDelete}
+          onConfirm={confirmDelete}
+        />
       </div>
     </div>
   );
