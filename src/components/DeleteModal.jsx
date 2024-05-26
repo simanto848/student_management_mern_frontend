@@ -12,6 +12,13 @@ const DeleteModal = ({ visible, onClose, onConfirm }) => {
       onOk={onConfirm}
       okText="Delete"
       cancelText="Cancel"
+      okButtonProps={{
+        style: {
+          backgroundColor: "#ff4d4f",
+          borderColor: "#ff4d4f",
+          color: "#fff",
+        },
+      }}
     >
       <p>Are you sure you want to delete this enrollment?</p>
     </Modal>

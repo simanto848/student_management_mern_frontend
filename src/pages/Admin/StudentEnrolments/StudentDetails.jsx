@@ -59,6 +59,12 @@ const StudentDetails = () => {
       <p>
         <strong>Semester Fee:</strong> {student.semesterFee}
       </p>
+      <p>
+        <strong>Actual Course Fee:</strong> {student.courseFee}
+      </p>
+      <p>
+        <strong>Scholarship:</strong> {student.scholarship}
+      </p>
     </div>
   );
 };

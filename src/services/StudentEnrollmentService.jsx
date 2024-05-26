@@ -46,13 +46,3 @@ export async function deleteEnrollment(enrollmentId) {
   }
   return response.json();
 }
-
-/*
-export async function getPaymentHistoryByStudentId(studentId) {
-  const response = await fetch(`${BASE_URL}/payment-history/${studentId}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch payment history");
-  }
-  return response.json();
-}
-*/

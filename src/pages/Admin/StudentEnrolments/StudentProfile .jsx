@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import StudentDetails from "./StudentDetails";

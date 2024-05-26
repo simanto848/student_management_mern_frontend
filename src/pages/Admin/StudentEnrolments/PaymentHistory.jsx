@@ -1,17 +1,27 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchPaymentDetailsByStudentId } from "../../../services/PaymentDetailsService";
+import { Modal, Form, InputNumber, Button, message, Input } from "antd";
+import {
+  fetchPaymentDetailsByStudentId,
+  updatePaymentDetails,
+  deletePaymentDetails,
+} from "../../../services/PaymentDetailsService";
+import DeleteModal from "../../../components/DeleteModal"; // Adjust the path as necessary
 
 const PaymentHistory = () => {
   const { id } = useParams();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
         const response = await fetchPaymentDetailsByStudentId(id);
-        console.log(response);
         setPayments(response);
         setLoading(false);
       } catch (error) {
@@ -22,14 +32,53 @@ const PaymentHistory = () => {
     fetchPayments();
   }, [id]);
 
-  const handleUpdatePayment = (paymentId) => {
-    console.log(`Update payment with ID: ${paymentId}`);
-    // Implement the update payment logic here
+  const showModal = (payment) => {
+    setSelectedPayment(payment);
+    form.setFieldsValue({
+      paymentAmount: payment.paymentAmount,
+      paymentFor: payment.paymentFor,
+      receipt: payment.receipt,
+      currentDue: payment.currentDue,
+    });
+    setIsModalVisible(true);
   };
 
-  const handleDeletePayment = (paymentId) => {
-    console.log(`Delete payment with ID: ${paymentId}`);
-    // Implement the delete payment logic here
+  const handleUpdatePayment = async (values) => {
+    try {
+      const updatedPayment = await updatePaymentDetails(
+        selectedPayment._id,
+        values
+      );
+      setPayments((prevPayments) =>
+        prevPayments.map((payment) =>
+          payment._id === selectedPayment._id ? updatedPayment : payment
+        )
+      );
+      setIsModalVisible(false);
+      message.success("Payment updated successfully");
+    } catch (error) {
+      console.error("Error updating payment:", error);
+      message.error("Failed to update payment");
+    }
+  };
+
+  const showDeleteModal = (payment) => {
+    setSelectedPayment(payment);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleDeletePayment = async () => {
+    try {
+      await deletePaymentDetails(selectedPayment._id);
+      setPayments((prevPayments) =>
+        prevPayments.filter((payment) => payment._id !== selectedPayment._id)
+      );
+      setIsDeleteModalVisible(false);
+      message.success("Payment deleted successfully");
+    } catch (error) {
+      console.error("Error deleting payment:", error);
+      message.error("Failed to delete payment");
+    }
   };
 
   if (loading) {
@@ -65,10 +114,7 @@ const PaymentHistory = () => {
               {payment.paymentAmount.toFixed(2)} tk
             </p>
             <p>
-              <strong>Current Due:</strong>
-            </p>
-            <p>
-              <strong>Total Due:</strong> {payment.currentDue.toFixed(2)} tk
+              <strong>Current Due:</strong> {payment.currentDue.toFixed(2)} tk
             </p>
             <p>
               <strong>Receipt:</strong> {payment.receipt}
@@ -78,23 +124,76 @@ const PaymentHistory = () => {
               {new Date(payment.createdAt).toLocaleDateString()}
             </p>
             <div className="flex space-x-4 mt-2">
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                onClick={() => handleUpdatePayment(payment._id)}
+              <Button
+                className="px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
+                onClick={() => showModal(payment)}
               >
                 Update
-              </button>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
-                onClick={() => handleDeletePayment(payment._id)}
+              </Button>
+              <Button
+                className="px-4 bg-red-500 text-white rounded hover:bg-red-700"
+                onClick={() => showDeleteModal(payment)}
               >
                 Delete
-              </button>
+              </Button>
             </div>
             <hr className="my-4" />
           </li>
         ))}
       </ul>
+
+      <Modal
+        title="Update Payment"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+            Cancel
+          </Button>,
+          <Button key="update" onClick={() => form.submit()}>
+            Update
+          </Button>,
+        ]}
+      >
+        <Form form={form} onFinish={handleUpdatePayment}>
+          <Form.Item
+            name="paymentFor"
+            label="Payment For"
+            rules={[
+              { required: true, message: "Please input the payment purpose!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="paymentAmount"
+            label="Payment Amount"
+            rules={[
+              { required: true, message: "Please input the payment amount!" },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} min={0} />
+          </Form.Item>
+          <Form.Item
+            name="currentDue"
+            label="Current Due"
+            rules={[
+              { required: true, message: "Please input the current due!" },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} min={0} />
+          </Form.Item>
+          <Form.Item name="receipt" label="Receipt">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <DeleteModal
+        visible={isDeleteModalVisible}
+        onClose={() => setIsDeleteModalVisible(false)}
+        onConfirm={handleDeletePayment}
+      />
     </div>
   );
 };
