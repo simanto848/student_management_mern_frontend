@@ -1,43 +1,52 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import { Input, Button, Table, notification } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, message, Table, Input } from "antd";
 import { Link } from "react-router-dom";
-import moment from "moment";
 import DashSidebar from "../../../components/DashSidebar";
 import { fetchStudents } from "../../../services/StudentService";
 
-const Enrollment = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function StudentList() {
   const [students, setStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = async () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
     try {
-      const response = await fetchStudents(searchTerm);
-      setStudents(response);
+      const studentData = await fetchStudents();
+      setStudents(studentData);
     } catch (error) {
-      console.error("Error fetching students:", error);
-      notification.error({
-        message: "Error",
-        description: "An error occurred while fetching students.",
-      });
+      message.error("Failed to fetch data!");
     }
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const highlightText = (text, query) => {
+    if (!query) return text;
+    const parts = text.toString().split(new RegExp(`(${query})`, "gi"));
+    return parts.map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
   const columns = [
+    { title: "SL", dataIndex: "index", key: "index" },
     {
-      title: "Name",
+      title: "Student Name",
       dataIndex: "name",
       key: "name",
-    },
-    {
-      title: "Batch",
-      dataIndex: "batchNo",
-      key: "batchNo",
-    },
-    {
-      title: "Registration No",
-      dataIndex: "registrationNo",
-      key: "registrationNo",
+      render: (text) => highlightText(text, searchQuery),
     },
     {
       title: "Roll No",
@@ -45,14 +54,22 @@ const Enrollment = () => {
       key: "rollNo",
     },
     {
-      title: "Department",
-      dataIndex: "department",
-      key: "department",
+      title: "Registration No",
+      dataIndex: "registrationNo",
+      key: "registrationNo",
+      render: (text) => highlightText(text, searchQuery),
     },
     {
-      title: "Session",
-      dataIndex: "session",
-      key: "session",
+      title: "Phone No",
+      dataIndex: "phoneNo",
+      key: "phoneNo",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Batch No",
+      dataIndex: "batchNo",
+      key: "batchNo",
+      render: (text) => highlightText(text, searchQuery),
     },
     {
       title: "Course Fee",
@@ -60,63 +77,89 @@ const Enrollment = () => {
       key: "courseFee",
     },
     {
+      title: "Scholarship Amount",
+      dataIndex: "scholarshipAmount",
+      key: "scholarshipAmount",
+    },
+    {
       title: "Semester Fee",
       dataIndex: "semesterFee",
       key: "semesterFee",
     },
     {
-      title: "Scholarship",
-      dataIndex: "scholarship",
-      key: "scholarship",
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      render: (text) => highlightText(text, searchQuery),
     },
     {
-      title: "Actions",
-      key: "actions",
+      title: "Session",
+      dataIndex: "session",
+      key: "session",
+      render: (text) => highlightText(text, searchQuery),
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
       render: (_, record) => (
-        <Link to={`/admin/student/${record._id}`}>View Details</Link>
+        <Link to={`/admin/student/${record.key}`}>View Details</Link>
       ),
     },
   ];
 
-  const data = students.map((student, index) => ({
+  const filteredStudents = students.filter((student) =>
+    [
+      "name",
+      "registrationNo",
+      "phoneNo",
+      "batchNo",
+      "department",
+      "session",
+    ].some((key) =>
+      student[key]?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
+  const data = filteredStudents.map((student, index) => ({
     key: student._id,
-    _id: student._id,
     index: index + 1,
     name: student.name,
-    registrationNo: student.registrationNo,
     rollNo: student.rollNo,
+    registrationNo: student.registrationNo,
+    phoneNo: student.phoneNo,
     batchNo: student.batchId.name,
+    courseFee: `${student.courseFee} tk`,
+    scholarshipAmount: `${student.scholarship} tk`,
+    semesterFee: `${student.semesterFee} tk`,
     department: student.departmentId.shortName,
     session: student.batchId.sessionId.session,
-    semesterFee: student.semesterFee,
-    courseFee: student.courseFee,
-    scholarship: student.scholarship,
-    joinDate: moment(student.createdAt).format("MM-DD-YYYY"),
   }));
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+    <div className="min-h-screen flex flex-col md:flex-row">
       <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
-        <div className="flex justify-center items-center mb-4">
+        <div className="my-2 flex justify-between flex-wrap">
+          <h1 className="text-slate-600 text-center text-3xl font-bold">
+            Student List
+          </h1>
           <Input
-            placeholder="Search by registration no or batch"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="mr-4 p-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 w-80"
-            autoComplete="on"
+            placeholder="Search student..."
+            onChange={handleSearch}
+            value={searchQuery}
+            className="w-80 rounded-lg outline-none border-1 border-blue-500 p-2"
           />
           <Button
-            onClick={handleSearch}
-            className="bg-blue-500 text-white text-center font-semibold px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            className="mr-2 text-blue-600 border-blue-600"
+            size="large"
+            type="primary"
           >
-            Search
+            <Link to="/admin/add/student">Add Student</Link>
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} rowKey="_id" />
+        <Table columns={columns} dataSource={data} />
       </div>
     </div>
   );
-};
-
-export default Enrollment;
+}
