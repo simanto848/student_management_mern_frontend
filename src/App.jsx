@@ -26,7 +26,9 @@ import AddStudent from "./pages/Admin/Students/AddStudent";
 import UpdateStudent from "./pages/Admin/Students/UpdateStudent";
 import Batches from "./pages/Admin/Btaches/Batches";
 import CreateBatch from "./pages/Admin/Btaches/CreateBatch";
-import Enrollemt from "./pages/Admin/Student Enrolments/Enrollemt";
+import Enrollment from "./pages/Admin/StudentEnrolments/Enrollment";
+import StudentProfile from "./pages/Admin/StudentEnrolments/StudentProfile ";
+import CreateEnrolment from "./pages/Admin/StudentEnrolments/CreateEnrolment";
 
 export const App = () => {
   return (
@@ -79,7 +81,12 @@ export const App = () => {
           />
 
           {/* Student Enrollment */}
-          <Route path="/admin/student-enrolments" element={<Enrollemt />} />
+          <Route path="/admin/student-enrolments" element={<Enrollment />} />
+          <Route path="/admin/student/:id" element={<StudentProfile />} />
+          <Route
+            path="/admin/add/student/:id/enrolment"
+            element={<CreateEnrolment />}
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

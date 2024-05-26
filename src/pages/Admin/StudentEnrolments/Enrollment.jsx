@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
-import { Input, Button, Table } from "antd";
+import { Input, Button, Table, notification } from "antd";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import DashSidebar from "../../../components/DashSidebar";
 import { fetchStudents } from "../../../services/StudentService";
 
@@ -15,6 +16,10 @@ const Enrollment = () => {
       setStudents(response);
     } catch (error) {
       console.error("Error fetching students:", error);
+      notification.error({
+        message: "Error",
+        description: "An error occurred while fetching students.",
+      });
     }
   };
 
@@ -25,7 +30,7 @@ const Enrollment = () => {
       key: "name",
     },
     {
-      title: "batch",
+      title: "Batch",
       dataIndex: "batchNo",
       key: "batchNo",
     },
@@ -55,33 +60,39 @@ const Enrollment = () => {
       key: "courseFee",
     },
     {
-      title: "Scholarship Amount",
-      dataIndex: "scholarshipAmount",
-      key: "scholarshipAmount",
-    },
-    {
       title: "Semester Fee",
       dataIndex: "semesterFee",
       key: "semesterFee",
     },
     {
-      title: "Total Paid",
-      dataIndex: "totalPaid",
-      key: "totalPaid",
-    },
-    {
-      title: "Total Due",
-      dataIndex: "totalDue",
-      key: "totalDue",
+      title: "Scholarship",
+      dataIndex: "scholarship",
+      key: "scholarship",
     },
     {
       title: "Actions",
       key: "actions",
-      render: (text, record) => (
-        <Link to={`/student/${record._id}`}>View Details</Link>
+      render: (_, record) => (
+        <Link to={`/admin/student/${record._id}`}>View Details</Link>
       ),
     },
   ];
+
+  const data = students.map((student, index) => ({
+    key: student._id,
+    _id: student._id,
+    index: index + 1,
+    name: student.name,
+    registrationNo: student.registrationNo,
+    rollNo: student.rollNo,
+    batchNo: student.batchId.name,
+    department: student.departmentId.shortName,
+    session: student.batchId.sessionId.session,
+    semesterFee: student.semesterFee,
+    courseFee: student.courseFee,
+    scholarship: student.scholarship,
+    joinDate: moment(student.createdAt).format("MM-DD-YYYY"),
+  }));
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
@@ -89,10 +100,11 @@ const Enrollment = () => {
       <div className="overflow-x-auto flex-1 p-4">
         <div className="flex justify-center items-center mb-4">
           <Input
-            placeholder="Search by registration no or batch no"
+            placeholder="Search by registration no or batch"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="mr-4 p-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 w-80"
+            autoComplete="on"
           />
           <Button
             onClick={handleSearch}
@@ -101,7 +113,7 @@ const Enrollment = () => {
             Search
           </Button>
         </div>
-        <Table columns={columns} dataSource={students} rowKey="_id" />
+        <Table columns={columns} dataSource={data} rowKey="_id" />
       </div>
     </div>
   );
