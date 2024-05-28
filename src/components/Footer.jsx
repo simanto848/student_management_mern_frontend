@@ -14,8 +14,8 @@ const { Text } = Typography;
 const FooterCom = () => {
   return (
     <Footer style={{ backgroundColor: "#2a2a2a", color: "#ffffff" }}>
-      <div className="container mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
+      <div className="container mx-auto max-w-7xl px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8">
           <div>
             <Link to="/">
               <Text strong style={{ fontSize: "1.5rem", color: "#ffffff" }}>
@@ -68,11 +68,11 @@ const FooterCom = () => {
           </div>
         </div>
         <Divider style={{ backgroundColor: "#ffffff" }} />
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-center">
           <Text style={{ color: "#ffffff" }}>
             &copy; {new Date().getFullYear()} Education.com by Simanto Hasan
           </Text>
-          <div className="flex gap-6">
+          <div className="flex gap-6 mt-4 md:mt-0">
             <Link to="#">
               <FacebookOutlined
                 style={{ fontSize: "1.5rem", color: "#ffffff" }}

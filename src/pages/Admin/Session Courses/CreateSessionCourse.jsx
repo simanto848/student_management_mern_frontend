@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, message, Select, Checkbox } from "antd";
 import { Link } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
@@ -134,7 +133,6 @@ export default function CreateSessionCourse() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="max-w-md mx-auto bg-white rounded-lg p-6">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">

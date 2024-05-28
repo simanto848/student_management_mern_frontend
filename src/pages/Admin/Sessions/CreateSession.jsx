@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import { createSession } from "../../../services/SessionService";
 
 const { Item } = Form;
@@ -28,7 +27,6 @@ export default function CreateSession() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
           Add Session

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Select, Button, message, Input } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import {
   fetchStudentById,
   updateStudent,
@@ -16,7 +15,7 @@ export default function UpdateStudent() {
   const [departments, setDepartments] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [batches, setBatches] = useState([]);
-  const [selectedSession, setSelectedSession] = useState(null); // State to store the selected session
+  const [selectedSession, setSelectedSession] = useState(null);
 
   const navigate = useNavigate();
   const { studentId } = useParams();
@@ -93,13 +92,12 @@ export default function UpdateStudent() {
   };
 
   const handleSessionChange = (value) => {
-    setSelectedSession(value); // Update the selected session
-    form.setFieldsValue({ batchId: "" }); // Reset batch selection when session changes
+    setSelectedSession(value);
+    form.setFieldsValue({ batchId: "" });
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="max-w-md mx-auto bg-white rounded-lg p-6 shadow-md border-2">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">

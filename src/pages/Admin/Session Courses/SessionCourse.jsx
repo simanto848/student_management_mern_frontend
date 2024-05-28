@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Button, message, Select, Table } from "antd";
-import DashSidebar from "../../../components/DashSidebar";
 import { Link } from "react-router-dom";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchSessionCoursesBySessionId } from "../../../services/SessionCourseService";
@@ -63,7 +62,6 @@ export default function SessionCourse() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">

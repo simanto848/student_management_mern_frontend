@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Table, Modal, Form, Input, Select, message } from "antd";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import {
   fetchDepartments,
@@ -122,7 +121,6 @@ export default function Departments() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">
@@ -150,6 +148,12 @@ export default function Departments() {
           open={editModalVisible}
           onCancel={handleCancelEdit}
           onOk={handleUpdate}
+          okButtonProps={{
+            style: {
+              color: "#000",
+              borderColor: "#ccc 1px solid",
+            },
+          }}
         >
           <Form
             form={form}

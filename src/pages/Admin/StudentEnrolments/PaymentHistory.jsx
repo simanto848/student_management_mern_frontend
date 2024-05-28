@@ -7,7 +7,7 @@ import {
   updatePaymentDetails,
   deletePaymentDetails,
 } from "../../../services/PaymentDetailsService";
-import DeleteModal from "../../../components/DeleteModal"; // Adjust the path as necessary
+import DeleteModal from "../../../components/DeleteModal";
 
 const PaymentHistory = () => {
   const { id } = useParams();

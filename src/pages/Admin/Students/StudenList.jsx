@@ -4,7 +4,6 @@ import { Button, message, Table, Modal, Input } from "antd";
 import { Link } from "react-router-dom";
 import { HiTrash } from "react-icons/hi";
 import { EditOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import { fetchStudents, deleteStudent } from "../../../services/StudentService";
 
 export default function StudentList() {
@@ -180,7 +179,6 @@ export default function StudentList() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">

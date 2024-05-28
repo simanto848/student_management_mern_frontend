@@ -4,7 +4,6 @@ import { Button, message, Table } from "antd";
 import { Link } from "react-router-dom";
 import { HiTrash } from "react-icons/hi";
 import { EditOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import { deleteTeacher, fetchTeachers } from "../../../services/TeacherService";
 import DeleteModal from "../../../components/DeleteModal";
@@ -104,7 +103,6 @@ export default function Teachers() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">

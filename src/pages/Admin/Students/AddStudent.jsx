@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Select, Button, message, Input, InputNumber } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import { fetchDepartments } from "../../../services/DepartmentService";
 import { fetchSessions } from "../../../services/SessionService";
 import { createStudent } from "../../../services/StudentService";
@@ -98,7 +97,6 @@ export default function AddStudent() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="max-w-md mx-auto bg-white rounded-lg p-6 shadow-md border-2">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">

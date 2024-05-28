@@ -2,14 +2,12 @@ import { useState, useEffect } from "react";
 import { Button, Table, Modal, Form, Input, message } from "antd";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import {
   updateFaculty,
   deleteFaculty,
   fetchFaculties,
 } from "../../../services/FacultyService";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function Faculties() {
   const [faculties, setFaculties] = useState([]);
@@ -28,7 +26,7 @@ export default function Faculties() {
       const facultiesData = await fetchFaculties();
       setFaculties(facultiesData);
     } catch (error) {
-      toast.error("Failed to fetch faculties");
+      message.error("Failed to fetch faculties");
     } finally {
       setLoading(false);
     }
@@ -67,10 +65,9 @@ export default function Faculties() {
       setFaculties((prevFaculties) =>
         prevFaculties.filter((faculty) => faculty._id !== facultyId)
       );
-      toast.success("Faculty deleted successfully");
+      message.success("Faculty deleted successfully");
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete faculty");
+      message.error("Failed to delete faculty");
     }
   };
 
@@ -114,9 +111,7 @@ export default function Faculties() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1">
-        <Toaster position="top-right" />
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">
             Faculty List
@@ -141,6 +136,13 @@ export default function Faculties() {
         open={editModalVisible}
         onCancel={handleCancelEdit}
         onOk={handleUpdate}
+        confirmLoading={loading}
+        okButtonProps={{
+          style: {
+            color: "#000",
+            borderColor: "#ccc 1px solid",
+          },
+        }}
       >
         <Form form={form} layout="vertical">
           <Form.Item

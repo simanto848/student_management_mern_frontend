@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Input, Select, message } from "antd";
-import DashSidebar from "../../../components/DashSidebar";
 import { createDepartment } from "../../../services/DepartmentService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +34,6 @@ export default function CreateDepartment() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
           Add Department

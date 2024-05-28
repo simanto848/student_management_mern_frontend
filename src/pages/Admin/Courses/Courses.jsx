@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, message } from "antd";
 import { Link } from "react-router-dom";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import { fetchCourses, deleteCourse } from "../../../services/CourseService";
 
@@ -58,12 +57,12 @@ export default function Courses() {
     {
       title: "Semester",
       dataIndex: "semester",
-      render: (semester) => `Semester ${semester}`, // Format semester correctly
+      render: (semester) => `Semester ${semester}`,
     },
     {
       title: "Department",
       dataIndex: ["departmentId", "shortName"],
-      render: (text, record) => record.departmentId?.shortName || "N/A", // Handle possible null values
+      render: (text, record) => record.departmentId?.shortName || "N/A",
     },
     {
       title: "Maintainable",
@@ -84,11 +83,7 @@ export default function Courses() {
               <EditOutlined />
             </Button>
           </Link>
-          <Button
-            size="small"
-            onClick={() => handleDelete(record._id)}
-            danger
-          >
+          <Button size="small" onClick={() => handleDelete(record._id)} danger>
             <DeleteOutlined />
           </Button>
         </span>
@@ -98,7 +93,6 @@ export default function Courses() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">

@@ -1,6 +1,5 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { useState, useEffect } from "react";
-import DashSidebar from "../../../components/DashSidebar";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createTeacher } from "../../../services/TeacherService";
@@ -64,7 +63,6 @@ export default function CreateTeacher() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <Toaster position="top-right" reverseOrder={false} />
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">

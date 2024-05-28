@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, message, Modal, Form, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import moment from "moment";
 import {
   fetchSessions,
@@ -74,7 +73,6 @@ export default function Sessions() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1">
         <div className="my-2 flex justify-between flex-wrap">
           <h1 className="text-slate-600 text-center text-3xl font-bold">

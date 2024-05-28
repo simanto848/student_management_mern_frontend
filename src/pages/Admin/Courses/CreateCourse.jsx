@@ -1,6 +1,5 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import DashSidebar from "../../../components/DashSidebar";
 import { useEffect, useState } from "react";
 import { createCourse } from "../../../services/CourseService";
 import { fetchFaculties } from "../../../services/FacultyService";
@@ -67,7 +66,6 @@ export default function CreateCourse() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">

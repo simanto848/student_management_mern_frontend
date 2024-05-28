@@ -1,7 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Select, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import DashSidebar from "../../../components/DashSidebar";
 import { createBatch } from "../../../services/BatchService";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchDepartments } from "../../../services/DepartmentService";
@@ -11,8 +11,8 @@ const { Option } = Select;
 export default function CreateBatch() {
   const [form] = Form.useForm();
   const [batch, setBatch] = useState("");
-  const [departmentId, setDepartmentId] = useState(""); // Updated state variable
-  const [sessionId, setSessionId] = useState(""); // Updated state variable
+  const [departmentId, setDepartmentId] = useState("");
+  const [sessionId, setSessionId] = useState("");
   const [sessions, setSessions] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,13 +44,12 @@ export default function CreateBatch() {
   const handleSubmit = async () => {
     setLoading(true);
     if (!batch || !departmentId || !sessionId) {
-      // Updated to use departmentId and sessionId
       message.error("Please fill in all fields");
       setLoading(false);
       return;
     }
     try {
-      await createBatch({ name: batch, departmentId, sessionId }); // Updated to use departmentId and sessionId
+      await createBatch({ name: batch, departmentId, sessionId });
       message.success(`Batch "${batch}" added successfully`);
       navigate("/batches");
     } catch (error) {
@@ -63,7 +62,6 @@ export default function CreateBatch() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
       <div className="overflow-x-auto flex-1 p-4">
         <div className="max-w-md mx-auto bg-white rounded-lg p-6 shadow-md border-2">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">

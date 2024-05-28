@@ -1,9 +1,7 @@
-import { Button, Input } from "antd";
-import DashSidebar from "../../../components/DashSidebar";
+import { Button, Input, message } from "antd";
 import { useState } from "react";
 import { addFaculty } from "../../../services/FacultyService";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 
 export default function CreateFaculty() {
   const [name, setName] = useState("");
@@ -13,7 +11,7 @@ export default function CreateFaculty() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) {
-      return toast.error("Faculty name is required");
+      return message.error("Faculty name is required");
     }
     try {
       setLoading(true);
@@ -22,15 +20,13 @@ export default function CreateFaculty() {
       setName("");
       navigate("/faculties");
     } catch (error) {
-      console.error(error);
+      message.error("Failed to add faculty");
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <DashSidebar />
-      <Toaster position="top-right" />
       <div className="overflow-x-auto flex-1 p-4">
         <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
           Add Faculty

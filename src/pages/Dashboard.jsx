@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import DashSidebar from "../components/DashSidebar";
 import Faculties from "./Admin/Faculties/Faculties";
 
 export default function Dashboard() {
@@ -14,14 +13,10 @@ export default function Dashboard() {
       setTab(tabFormUrl);
     }
   }, [location.search]);
-  console.log("From Dashboard Tab = ", tab);
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="">
-        <DashSidebar />
-      </div>
       <div>
-        <h1>Dashboard</h1>
+        <h1>Welcome to Dashboard</h1>
         {/* Faculties... */}
         {tab === "faculties" && <Faculties />}
       </div>
