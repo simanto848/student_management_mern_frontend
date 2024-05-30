@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchCourseById, updateCourse } from "../../../services/CourseService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
+import Loading from "../../../components/Loading";
 
 const { Option } = Select;
 
@@ -13,6 +14,7 @@ const UpdateCourse = () => {
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedFacultyId, setSelectedFacultyId] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -67,12 +69,18 @@ const UpdateCourse = () => {
         const data = await res.json();
         throw new Error(data.message || "Failed to update course");
       }
+      setLoading(false);
       message.success("Course updated successfully");
       navigate("/courses");
     } catch (error) {
+      setLoading(false);
       message.error(error.message);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

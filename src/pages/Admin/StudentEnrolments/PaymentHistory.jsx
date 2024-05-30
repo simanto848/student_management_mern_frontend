@@ -8,6 +8,7 @@ import {
   deletePaymentDetails,
 } from "../../../services/PaymentDetailsService";
 import DeleteModal from "../../../components/DeleteModal";
+import Loading from "../../../components/Loading";
 
 const PaymentHistory = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const PaymentHistory = () => {
         setPayments(response);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching payment history:", error);
+        setLoading(false);
       }
     };
 
@@ -57,7 +58,6 @@ const PaymentHistory = () => {
       setIsModalVisible(false);
       message.success("Payment updated successfully");
     } catch (error) {
-      console.error("Error updating payment:", error);
       message.error("Failed to update payment");
     }
   };
@@ -76,22 +76,12 @@ const PaymentHistory = () => {
       setIsDeleteModalVisible(false);
       message.success("Payment deleted successfully");
     } catch (error) {
-      console.error("Error deleting payment:", error);
       message.error("Failed to delete payment");
     }
   };
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="relative w-16 h-16">
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-blue-500 rounded-full animate-spin"></div>
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-green-500 rounded-full animate-spin"></div>
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-red-500 rounded-full animate-spin"></div>
-        </div>
-        <p className="mt-4 text-gray-600">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!payments.length) {

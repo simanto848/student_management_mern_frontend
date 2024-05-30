@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useEffect } from "react";
 import { Button, Table, Modal, Form, Input, message } from "antd";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
@@ -8,6 +9,7 @@ import {
   deleteFaculty,
   fetchFaculties,
 } from "../../../services/FacultyService";
+import Loading from "../../../components/Loading";
 
 export default function Faculties() {
   const [faculties, setFaculties] = useState([]);
@@ -122,13 +124,17 @@ export default function Faculties() {
             </Link>
           </Button>
         </div>
-        <Table
-          dataSource={faculties}
-          columns={columns}
-          loading={loading}
-          pagination={{ pageSize: 10 }}
-          rowKey="_id"
-        />
+        {loading ? ( // Render Loading component when loading state is true
+          <Loading />
+        ) : (
+          <Table
+            dataSource={faculties}
+            columns={columns}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+            rowKey="_id"
+          />
+        )}
       </div>
 
       <Modal

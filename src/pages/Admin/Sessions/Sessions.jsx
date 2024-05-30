@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Button, Table, message, Modal, Form, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -9,6 +9,7 @@ import {
   deleteSession,
   updateSession,
 } from "../../../services/SessionService";
+import Loading from "../../../components/Loading";
 
 const { Column } = Table;
 const { Item } = Form;
@@ -18,18 +19,22 @@ export default function Sessions() {
   const [visible, setVisible] = useState(false);
   const [sessionToUpdate, setSessionToUpdate] = useState({});
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const data = await fetchSessions();
       setSessions(data);
     } catch (error) {
       console.error(error);
       message.error("Failed to fetch sessions!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +52,7 @@ export default function Sessions() {
   const handleUpdate = async () => {
     try {
       const values = await form.validateFields();
-      await updateSession(sessionToUpdate._id, values.session); // Call the updateSession function
+      await updateSession(sessionToUpdate._id, values.session);
       message.success(`Session "${values.session}" updated successfully`);
       setVisible(false);
       form.resetFields();
@@ -82,39 +87,43 @@ export default function Sessions() {
             <Link to="/create-session">Add Session</Link>
           </Button>
         </div>
-        <Table dataSource={sessions} rowKey="_id">
-          <Column
-            title="SL"
-            dataIndex="index"
-            key="index"
-            render={(text, record, index) => index + 1}
-          />
-          <Column title="Session" dataIndex="session" key="session" />
-          <Column
-            title="Created at"
-            dataIndex="createdAt"
-            key="createdAt"
-            render={(text) => moment(text).format("MM-DD-YYYY")}
-          />
-          <Column
-            title="Actions"
-            key="actions"
-            render={(text, record) => (
-              <span>
-                <Button
-                  size="small"
-                  icon={<EditOutlined />}
-                  onClick={() => handleEdit(record)}
-                />
-                <Button
-                  size="small"
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(record._id)}
-                />
-              </span>
-            )}
-          />
-        </Table>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Table dataSource={sessions} rowKey="_id">
+            <Column
+              title="SL"
+              dataIndex="index"
+              key="index"
+              render={(text, record, index) => index + 1}
+            />
+            <Column title="Session" dataIndex="session" key="session" />
+            <Column
+              title="Created at"
+              dataIndex="createdAt"
+              key="createdAt"
+              render={(text) => moment(text).format("MM-DD-YYYY")}
+            />
+            <Column
+              title="Actions"
+              key="actions"
+              render={(text, record) => (
+                <span>
+                  <Button
+                    size="small"
+                    icon={<EditOutlined />}
+                    onClick={() => handleEdit(record)}
+                  />
+                  <Button
+                    size="small"
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleDelete(record._id)}
+                  />
+                </span>
+              )}
+            />
+          </Table>
+        )}
         <Modal
           title="Edit Session"
           open={visible}
@@ -123,7 +132,7 @@ export default function Sessions() {
             <Button key="cancel" onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button key="update" onClick={handleUpdate}>
+            <Button key="update" type="primary" onClick={handleUpdate}>
               Update
             </Button>,
           ]}

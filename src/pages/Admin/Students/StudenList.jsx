@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from "react";
-import { Button, message, Table, Modal, Input } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Table, Modal, Input, message } from "antd";
 import { Link } from "react-router-dom";
 import { HiTrash } from "react-icons/hi";
 import { EditOutlined } from "@ant-design/icons";
@@ -11,6 +11,7 @@ export default function StudentList() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deletingStudentId, setDeletingStudentId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -18,11 +19,13 @@ export default function StudentList() {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const studentData = await fetchStudents();
-      console.log(studentData);
       setStudents(studentData);
     } catch (error) {
       message.error("Failed to fetch data!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -199,7 +202,14 @@ export default function StudentList() {
             <Link to="/admin/add/student">Add Student</Link>
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} />
+
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{ pageSize: 10 }}
+          loading={loading}
+        />
+
         <Modal
           title="Confirm Delete"
           open={deleteModalVisible}

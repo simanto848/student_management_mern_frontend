@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { fetchCourses, deleteCourse } from "../../../services/CourseService";
+import Loading from "../../../components/Loading";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCoursesData();
@@ -17,9 +19,10 @@ export default function Courses() {
     try {
       const data = await fetchCourses();
       setCourses(data);
+      setLoading(false);
     } catch (error) {
-      console.error(error);
       message.error("Failed to fetch courses!");
+      setLoading(false);
     }
   };
 
@@ -31,7 +34,6 @@ export default function Courses() {
       );
       message.success("Course deleted successfully");
     } catch (error) {
-      console.error(error);
       message.error("Failed to delete course!");
     }
   };
@@ -90,6 +92,10 @@ export default function Courses() {
       ),
     },
   ];
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

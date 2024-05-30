@@ -1,10 +1,11 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { createCourse } from "../../../services/CourseService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
-import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 const { Option } = Select;
 
@@ -13,6 +14,7 @@ export default function CreateCourse() {
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [loading, setLoading] = useState(true);
   const semesterOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const maintainableOptions = [true, false];
 
@@ -39,10 +41,12 @@ export default function CreateCourse() {
         return message.error(res.message);
       }
 
+      setLoading(false);
       message.success(res.message);
       navigate("/courses");
     } catch (error) {
       message.error("Failed to create course!");
+      setLoading(false);
     }
   };
 
@@ -63,6 +67,10 @@ export default function CreateCourse() {
       message.error("Failed to fetch departments!");
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

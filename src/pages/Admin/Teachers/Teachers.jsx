@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Button, message, Table } from "antd";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ export default function Teachers() {
   const [teachers, setTeachers] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deletingTeacherId, setDeletingTeacherId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -19,10 +20,13 @@ export default function Teachers() {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const teacherData = await fetchTeachers();
       setTeachers(teacherData);
     } catch (error) {
       message.error("Failed to fetch data");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,7 +120,7 @@ export default function Teachers() {
             <Link to="/create-teacher">Add Teacher</Link>
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={loading} />{" "}
         <DeleteModal
           visible={deleteModalVisible}
           onClose={handleCancelDelete}

@@ -10,6 +10,7 @@ import {
   fetchSessionCoursesByDepartment,
   createSessionCourse,
 } from "../../../services/SessionCourseService";
+import Loading from "../../../components/Loading";
 
 export default function CreateSessionCourse() {
   const [form] = Form.useForm();
@@ -23,10 +24,10 @@ export default function CreateSessionCourse() {
   const [departmentDisabled, setDepartmentDisabled] = useState(true);
   const [sessionDisabled, setSessionDisabled] = useState(true);
   const [selectedSessionCourses, setSelectedSessionCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSessionData();
-    fetchFacultiesData();
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
@@ -57,12 +58,24 @@ export default function CreateSessionCourse() {
     }
   }, [selectedSession, selectedDepartment]);
 
+  const fetchInitialData = async () => {
+    setLoading(true);
+    try {
+      await fetchSessionData();
+      await fetchFacultiesData();
+    } catch (error) {
+      message.error("Failed to fetch initial data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchSessionData = async () => {
     try {
       const data = await fetchSessions();
       setSessions(data);
     } catch (error) {
-      message.error("Failed to fetch session courses");
+      message.error("Failed to fetch sessions");
     }
   };
 
@@ -71,7 +84,7 @@ export default function CreateSessionCourse() {
       const data = await fetchFaculties();
       setFaculties(data);
     } catch (error) {
-      message.error("Failed to fetch faculties" || error.message);
+      message.error("Failed to fetch faculties");
     }
   };
 
@@ -85,51 +98,64 @@ export default function CreateSessionCourse() {
   };
 
   const fetchDepartmentsData = async (facultyId) => {
+    setLoading(true);
     try {
       const { data } = await fetchDepartmentsByFaculty(facultyId);
       setDepartments(data);
     } catch (error) {
-      message.error("Failed to fetch departments" || error.message);
+      message.error("Failed to fetch departments");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchCoursesByDepartmentData = async (departmentId) => {
+    setLoading(true);
     try {
       const data = await fetchCoursesByDepartment(departmentId);
       setCourses(data);
     } catch (error) {
-      message.error("Failed to fetch courses" || error.message);
+      message.error("Failed to fetch courses");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchSessionCoursesData = async (sessionId, departmentId) => {
+    setLoading(true);
     try {
-      const data = await fetchSessionCoursesByDepartment(
-        sessionId,
-        departmentId
-      );
+      const data = await fetchSessionCoursesByDepartment(sessionId, departmentId);
       const selectedCourses = data.map((course) => course.courseId);
-      console.log(selectedCourses);
       setSelectedSessionCourses(selectedCourses);
+      form.setFieldsValue({ courseIds: selectedCourses });
     } catch (error) {
-      message.error("Failed to fetch session courses" || error.message);
+      message.error("Failed to fetch session courses");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSessionChange = async (value) => {
+  const handleSessionChange = (value) => {
     setSelectedSession(value);
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const values = await form.validateFields();
       const { sessionId, departmentId, courseIds } = values;
       await createSessionCourse(sessionId, departmentId, courseIds);
       message.success("Session courses created/updated successfully");
     } catch (error) {
-      message.error("Failed to create/update session courses" || error.message);
+      message.error("Failed to create/update session courses");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -138,7 +164,7 @@ export default function CreateSessionCourse() {
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
             Add Session Course
           </h1>
-          <Form layout="vertical" form={form} onFinish={handleSubmit}>
+          <Form layout="vertical" form={form} onFinish={handleSubmit} initialValues={{ courseIds: selectedSessionCourses }}>
             <Form.Item
               name="facultyId"
               rules={[
@@ -197,16 +223,11 @@ export default function CreateSessionCourse() {
             </Form.Item>
             {courses.length > 0 && (
               <Form.Item label="All Courses" name="courseIds">
-                <Checkbox.Group>
+                <Checkbox.Group defaultValue={selectedSessionCourses}>
                   {courses.map((course) => (
                     <Checkbox
                       key={course._id}
                       value={course._id}
-                      checked={
-                        selectedSessionCourses.includes(course._id)
-                          ? true
-                          : false
-                      }
                     >
                       {course.name}
                     </Checkbox>

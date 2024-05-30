@@ -2,35 +2,33 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchStudentById } from "../../../services/StudentService";
+import Loading from "../../../components/Loading";
 
 const StudentDetails = () => {
   const { id } = useParams();
   const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
         const response = await fetchStudentById(id);
         setStudent(response);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching student details:", error);
+        setLoading(false);
       }
     };
 
     fetchStudent();
   }, [id]);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   if (!student) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="relative w-16 h-16">
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-blue-500 rounded-full animate-spin"></div>
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-green-500 rounded-full animate-spin"></div>
-          <div className="absolute top-0 left-0 w-full h-full border-t-4 border-red-500 rounded-full animate-spin"></div>
-        </div>
-        <p className="mt-4 text-gray-600">Loading...</p>
-      </div>
-    );
+    return <div className="text-gray-600">No student details found.</div>;
   }
 
   return (

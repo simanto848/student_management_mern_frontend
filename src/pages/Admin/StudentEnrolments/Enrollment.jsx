@@ -7,6 +7,7 @@ import { fetchStudents } from "../../../services/StudentService";
 export default function StudentList() {
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -16,8 +17,10 @@ export default function StudentList() {
     try {
       const studentData = await fetchStudents();
       setStudents(studentData);
+      setLoading(false);
     } catch (error) {
       message.error("Failed to fetch data!");
+      setLoading(false);
     }
   };
 
@@ -156,7 +159,7 @@ export default function StudentList() {
             <Link to="/admin/add/student">Add Student</Link>
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={loading} />
       </div>
     </div>
   );

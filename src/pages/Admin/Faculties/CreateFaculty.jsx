@@ -2,6 +2,7 @@ import { Button, Input, message } from "antd";
 import { useState } from "react";
 import { addFaculty } from "../../../services/FacultyService";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 export default function CreateFaculty() {
   const [name, setName] = useState("");
@@ -41,15 +42,19 @@ export default function CreateFaculty() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            loading={loading}
-            className="text-black border-gray-200"
-          >
-            Add
-          </Button>
+          {loading ? (
+            <Loading />
+          ) : (
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              loading={loading}
+              className="text-black border-gray-200"
+            >
+              Add
+            </Button>
+          )}
         </form>
       </div>
     </div>

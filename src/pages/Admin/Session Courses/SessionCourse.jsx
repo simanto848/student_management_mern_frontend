@@ -4,41 +4,40 @@ import { Button, message, Select, Table } from "antd";
 import { Link } from "react-router-dom";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchSessionCoursesBySessionId } from "../../../services/SessionCourseService";
+import Loading from "../../../components/Loading";
 
 export default function SessionCourse() {
   const [sessionCourses, setSessionCourses] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedSession, setSelectedSession] = useState(null);
 
   useEffect(() => {
     fetchSessionsData();
   }, []);
 
   const fetchSessionCoursesData = async (sessionId) => {
+    setLoading(true);
     try {
       const response = await fetchSessionCoursesBySessionId(sessionId);
-      if (response.length > 0) {
-        setSessionCourses(response);
-      } else {
-        setSessionCourses([]);
-        message.error(response.message || "No session courses found");
-      }
+      setSessionCourses(response);
     } catch (error) {
-      console.error("Failed to fetch session courses:", error);
       message.error("Failed to fetch session courses");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchSessionsData = async () => {
+    setLoading(true);
     try {
       const response = await fetchSessions();
-      if (response.length > 0) {
-        setSessions(response);
-      } else {
-        message.error("No sessions found");
-      }
+      setSessions(response);
     } catch (error) {
       console.error("Failed to fetch sessions:", error);
       message.error("Failed to fetch sessions");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,6 +77,7 @@ export default function SessionCourse() {
             placeholder="Select a session"
             optionFilterProp="children"
             onChange={(value) => {
+              setSelectedSession(value);
               fetchSessionCoursesData(value);
             }}
           >
@@ -88,9 +88,13 @@ export default function SessionCourse() {
             ))}
           </Select>
         </div>
-        <div className="my-2">
-          <Table columns={columns} dataSource={data} />
-        </div>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="my-2">
+            <Table columns={columns} dataSource={data} />
+          </div>
+        )}
       </div>
     </div>
   );
