@@ -27,38 +27,11 @@ export default function CreateSessionCourse() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchInitialData();
-  }, []);
+    fetchData();
+    handleDataFetching();
+  }, [selectedFaculty, selectedDepartment, selectedSession]);
 
-  useEffect(() => {
-    if (selectedFaculty) {
-      fetchDepartmentsData(selectedFaculty);
-      setDepartmentDisabled(false);
-    } else {
-      setDepartments([]);
-      setSelectedDepartment("");
-      setDepartmentDisabled(true);
-    }
-  }, [selectedFaculty]);
-
-  useEffect(() => {
-    if (selectedDepartment) {
-      fetchCoursesByDepartmentData(selectedDepartment);
-      setSessionDisabled(false);
-    } else {
-      setCourses([]);
-      setSelectedSession("");
-      setSessionDisabled(true);
-    }
-  }, [selectedDepartment]);
-
-  useEffect(() => {
-    if (selectedSession) {
-      fetchSessionCoursesData(selectedSession, selectedDepartment);
-    }
-  }, [selectedSession, selectedDepartment]);
-
-  const fetchInitialData = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
       await fetchSessionData();
@@ -67,6 +40,30 @@ export default function CreateSessionCourse() {
       message.error("Failed to fetch initial data");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDataFetching = async () => {
+    if (selectedFaculty) {
+      setDepartmentDisabled(false);
+      await fetchDepartmentsData(selectedFaculty);
+    } else {
+      setDepartments([]);
+      setSelectedDepartment("");
+      setDepartmentDisabled(true);
+    }
+
+    if (selectedDepartment) {
+      setSessionDisabled(false);
+      await fetchCoursesByDepartmentData(selectedDepartment);
+    } else {
+      setCourses([]);
+      setSelectedSession("");
+      setSessionDisabled(true);
+    }
+
+    if (selectedSession && selectedDepartment) {
+      await fetchSessionCoursesData(selectedSession, selectedDepartment);
     }
   };
 
@@ -124,7 +121,13 @@ export default function CreateSessionCourse() {
   const fetchSessionCoursesData = async (sessionId, departmentId) => {
     setLoading(true);
     try {
-      const data = await fetchSessionCoursesByDepartment(sessionId, departmentId);
+      const data = await fetchSessionCoursesByDepartment(
+        sessionId,
+        departmentId
+      );
+      if (data.length === 0) {
+        message.info("No session courses found for this session!");
+      }
       const selectedCourses = data.map((course) => course.courseId);
       setSelectedSessionCourses(selectedCourses);
       form.setFieldsValue({ courseIds: selectedCourses });
@@ -164,7 +167,12 @@ export default function CreateSessionCourse() {
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
             Add Session Course
           </h1>
-          <Form layout="vertical" form={form} onFinish={handleSubmit} initialValues={{ courseIds: selectedSessionCourses }}>
+          <Form
+            layout="vertical"
+            form={form}
+            onFinish={handleSubmit}
+            initialValues={{ courseIds: selectedSessionCourses }}
+          >
             <Form.Item
               name="facultyId"
               rules={[
@@ -223,12 +231,9 @@ export default function CreateSessionCourse() {
             </Form.Item>
             {courses.length > 0 && (
               <Form.Item label="All Courses" name="courseIds">
-                <Checkbox.Group defaultValue={selectedSessionCourses}>
+                <Checkbox.Group initialValues={selectedSessionCourses}>
                   {courses.map((course) => (
-                    <Checkbox
-                      key={course._id}
-                      value={course._id}
-                    >
+                    <Checkbox key={course._id} value={course._id}>
                       {course.name}
                     </Checkbox>
                   ))}

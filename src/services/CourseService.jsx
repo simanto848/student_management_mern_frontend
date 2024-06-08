@@ -1,5 +1,3 @@
-// CourseService.js
-
 const BASE_URL = "/api/course";
 
 export async function fetchCourses() {
@@ -20,7 +18,6 @@ export async function createCourse(formData) {
   });
   if (!response.ok) {
     const data = await response.json();
-    console.log(data);
     throw new Error(data.message);
   }
   return response.json();

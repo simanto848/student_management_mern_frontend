@@ -4,13 +4,11 @@ import { Button, message, Select, Table } from "antd";
 import { Link } from "react-router-dom";
 import { fetchSessions } from "../../../services/SessionService";
 import { fetchSessionCoursesBySessionId } from "../../../services/SessionCourseService";
-import Loading from "../../../components/Loading";
 
 export default function SessionCourse() {
   const [sessionCourses, setSessionCourses] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedSession, setSelectedSession] = useState(null);
 
   useEffect(() => {
     fetchSessionsData();
@@ -20,6 +18,9 @@ export default function SessionCourse() {
     setLoading(true);
     try {
       const response = await fetchSessionCoursesBySessionId(sessionId);
+      if (response.length === 0) {
+        message.info("No session courses found for this session!");
+      }
       setSessionCourses(response);
     } catch (error) {
       message.error("Failed to fetch session courses");
@@ -34,7 +35,6 @@ export default function SessionCourse() {
       const response = await fetchSessions();
       setSessions(response);
     } catch (error) {
-      console.error("Failed to fetch sessions:", error);
       message.error("Failed to fetch sessions");
     } finally {
       setLoading(false);
@@ -46,7 +46,7 @@ export default function SessionCourse() {
     { title: "Session", dataIndex: "session", key: "session" },
     { title: "Department", dataIndex: "department", key: "department" },
     { title: "Course Name", dataIndex: "courseName", key: "courseName" },
-    { title: "Course", dataIndex: "course", key: "course" },
+    { title: "Course Code", dataIndex: "course", key: "course" },
   ];
 
   const data = sessionCourses.map((sessionCourse, index) => ({
@@ -72,12 +72,9 @@ export default function SessionCourse() {
         </div>
         <div className="my-2 flex justify-center ">
           <Select
-            showSearch
             style={{ width: 200 }}
             placeholder="Select a session"
-            optionFilterProp="children"
             onChange={(value) => {
-              setSelectedSession(value);
               fetchSessionCoursesData(value);
             }}
           >
@@ -88,13 +85,9 @@ export default function SessionCourse() {
             ))}
           </Select>
         </div>
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="my-2">
-            <Table columns={columns} dataSource={data} />
-          </div>
-        )}
+        <div className="my-2">
+          <Table columns={columns} dataSource={data} loading={loading} />
+        </div>
       </div>
     </div>
   );

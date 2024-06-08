@@ -3,10 +3,12 @@ const BASE_URL = "/api/session-courses";
 export async function fetchSessionCoursesBySessionId(sessionId) {
   try {
     const response = await fetch(`${BASE_URL}/${sessionId}`);
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = await response.json();
-    return data;
+    return data.length > 0 ? data : [];
   } catch (error) {
-    console.log("Failed to fetch session courses", error);
     return [];
   }
 }
@@ -16,8 +18,11 @@ export async function fetchSessionCoursesByDepartment(sessionId, departmentId) {
     const response = await fetch(
       `${BASE_URL}/${sessionId}/department/${departmentId}`
     );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = await response.json();
-    return data;
+    return data.length > 0 ? data : [];
   } catch (error) {
     return [];
   }
