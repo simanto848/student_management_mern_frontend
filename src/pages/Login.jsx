@@ -26,7 +26,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex p-6 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-8">
+      <div className="flex p-6 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-8 mb-24">
         {/* left */}
         <div className="flex-1 text-center md:text-left">
           <Link to="/" className="font-bold text-4xl">
@@ -41,7 +41,7 @@ export default function Login() {
         </div>
 
         {/* right */}
-        <div className="flex-1 bg-white p-8 shadow-lg rounded-lg">
+        <div className="flex-1 bg-white ml-10 p-8 shadow-lg rounded-lg">
           <Form
             className="flex flex-col gap-4"
             onFinish={handleSubmit}
@@ -80,6 +80,11 @@ export default function Login() {
             </Form.Item>
             <Form.Item>
               <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <Form.Item>
+              <Link to="/forgot-password" className="text-blue-500">
+                Forgot password?
+              </Link>
             </Form.Item>
             <Form.Item>
               <Button
