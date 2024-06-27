@@ -43,3 +43,22 @@ export async function createSessionCourse(sessionId, departmentId, courseIds) {
     return { message: error.message };
   }
 }
+
+export async function updateSessionCourse(sessionCourseId, teacherId) {
+  try {
+    const response = await fetch(`${BASE_URL}/${sessionCourseId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ teacherId }),
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return { message: error.message };
+  }
+}
