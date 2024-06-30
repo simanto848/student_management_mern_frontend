@@ -3,8 +3,6 @@ import {
   PieChartOutlined,
   UserOutlined,
   InboxOutlined,
-  ShoppingOutlined,
-  TableOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getUserFromCookie } from "../services/Cookies";
@@ -42,26 +40,26 @@ const DashSidebar = ({ drawerVisible, toggleDrawer }) => {
 
           {currentUser && currentUser.role === "admin" && (
             <SubMenu key="sub1" icon={<UserOutlined />} title="Details">
-              <Menu.Item key="/faculties">
-                <Link to="/faculties">Faculties</Link>
+              <Menu.Item key="/admin/faculties">
+                <Link to="/admin/faculties">Faculties</Link>
               </Menu.Item>
-              <Menu.Item key="/departments">
-                <Link to="/departments">Departments</Link>
+              <Menu.Item key="/admin/departments">
+                <Link to="/admin/departments">Departments</Link>
               </Menu.Item>
-              <Menu.Item key="/teachers">
-                <Link to="/teachers">Teachers</Link>
+              <Menu.Item key="/admin/teachers">
+                <Link to="/admin/teachers">Teachers</Link>
               </Menu.Item>
-              <Menu.Item key="/sessions">
-                <Link to="/sessions">Sessions</Link>
+              <Menu.Item key="/admin/sessions">
+                <Link to="/admin/sessions">Sessions</Link>
               </Menu.Item>
-              <Menu.Item key="/batches">
-                <Link to="/batches">Batches</Link>
+              <Menu.Item key="/admin/batches">
+                <Link to="/admin/batches">Batches</Link>
               </Menu.Item>
-              <Menu.Item key="/courses">
-                <Link to="/courses">Courses</Link>
+              <Menu.Item key="/admin/courses">
+                <Link to="/admin/courses">Courses</Link>
               </Menu.Item>
-              <Menu.Item key="/session-courses">
-                <Link to="/session-courses">Session Courses</Link>
+              <Menu.Item key="/admin/session-courses">
+                <Link to="/admin/session-courses">Session Courses</Link>
               </Menu.Item>
               <Menu.Item key="/admin/students">
                 <Link to="/admin/students">Students</Link>
@@ -74,14 +72,6 @@ const DashSidebar = ({ drawerVisible, toggleDrawer }) => {
 
           <Menu.Item key="/inbox" icon={<InboxOutlined />}>
             <Link to="/inbox">Inbox</Link>
-          </Menu.Item>
-
-          <Menu.Item key="/users" icon={<ShoppingOutlined />}>
-            <Link to="/users">Users</Link>
-          </Menu.Item>
-
-          <Menu.Item key="/products" icon={<TableOutlined />}>
-            <Link to="/products">Products</Link>
           </Menu.Item>
 
           <Menu.Item

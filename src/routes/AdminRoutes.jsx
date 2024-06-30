@@ -28,22 +28,28 @@ import OnlyAdminRoutes from "../components/OnlyAdminRoutes";
 const AdminRoutes = () => {
   return (
     <Route element={<OnlyAdminRoutes />}>
-      <Route path="/faculties" element={<Faculties />} />
-      <Route path="/create-faculty" element={<CreateFaculty />} />
-      <Route path="/departments" element={<Departments />} />
-      <Route path="/create-department" element={<CreateDepartment />} />
-      <Route path="/teachers" element={<Teachers />} />
-      <Route path="/create-teacher" element={<CreateTeacher />} />
-      <Route path="/update-teacher/:teacherId" element={<UpdateTeacher />} />
-      <Route path="/sessions" element={<Sessions />} />
-      <Route path="/create-session" element={<CreateSession />} />
-      <Route path="/batches" element={<Batches />} />
-      <Route path="/batch/add" element={<CreateBatch />} />
-      <Route path="/courses" element={<Courses />} />
-      <Route path="/create-course" element={<CreateCourse />} />
-      <Route path="/update-course/:courseId" element={<UpdateCourse />} />
-      <Route path="/session-courses" element={<SessionCourse />} />
-      <Route path="/create-session-course" element={<CreateSessionCourse />} />
+      <Route path="/admin/faculties" element={<Faculties />} />
+      <Route path="/admin/create-faculty" element={<CreateFaculty />} />
+      <Route path="/admin/departments" element={<Departments />} />
+      <Route path="/admin/create-department" element={<CreateDepartment />} />
+      <Route path="/admin/teachers" element={<Teachers />} />
+      <Route path="/admin/create-teacher" element={<CreateTeacher />} />
+      <Route
+        path="/admin/update-teacher/:teacherId"
+        element={<UpdateTeacher />}
+      />
+      <Route path="/admin/sessions" element={<Sessions />} />
+      <Route path="/admin/create-session" element={<CreateSession />} />
+      <Route path="/admin/batches" element={<Batches />} />
+      <Route path="/admin/batch/add" element={<CreateBatch />} />
+      <Route path="/admin/courses" element={<Courses />} />
+      <Route path="/admin/create-course" element={<CreateCourse />} />
+      <Route path="/admin/update-course/:courseId" element={<UpdateCourse />} />
+      <Route path="/admin/session-courses" element={<SessionCourse />} />
+      <Route
+        path="/admin/create-session-course"
+        element={<CreateSessionCourse />}
+      />
       <Route path="/admin/students" element={<StudentList />} />
       <Route path="/admin/add/student" element={<AddStudent />} />
       <Route
