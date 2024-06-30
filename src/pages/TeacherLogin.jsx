@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/AuthService";
 
-export default function Login() {
+export default function TeacherLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -95,13 +95,13 @@ export default function Login() {
             </Form.Item>
             {/* Additional role options */}
             <div className="flex justify-between">
-              <Link to="/admin-login" className="text-blue-500">
+              <Link to="/admin-login" className="text-blue-500 hover:underline">
                 Login as Admin
               </Link>
-              <Link to="/teacher-login" className="text-blue-500">
-                Login as Teacher
+              <Link to="/" className="text-blue-500 hover:underline">
+                Login as Student
               </Link>
-              <Link to="/staff-login" className="text-blue-500">
+              <Link to="/staff-login" className="text-blue-500 hover:underline">
                 Login as Staff
               </Link>
             </div>
