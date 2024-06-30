@@ -1,6 +1,5 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { useState, useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createTeacher } from "../../../services/TeacherService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
@@ -48,7 +47,7 @@ export default function CreateTeacher() {
       const data = await fetchFaculties();
       setFaculties(data);
     } catch (error) {
-      toast.error("Failed to fetch faculties");
+      message.error("Failed to fetch faculties");
     }
   };
 
@@ -57,14 +56,13 @@ export default function CreateTeacher() {
       const { data } = await fetchDepartmentsByFaculty(facultyId);
       setDepartments(data);
     } catch (error) {
-      toast.error("Failed to fetch departments");
+      message.error("Failed to fetch departments");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <div className="overflow-x-auto flex-1 p-4">
-        <Toaster position="top-right" reverseOrder={false} />
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
             Add Teacher

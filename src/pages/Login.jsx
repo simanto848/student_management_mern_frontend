@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/AuthService";
@@ -94,6 +93,18 @@ export default function Login() {
                 Sign In
               </Button>
             </Form.Item>
+            {/* Additional role options */}
+            <div className="flex justify-between">
+              <Link to="/admin-login" className="text-blue-500">
+                Login as Admin
+              </Link>
+              <Link to="/teacher-login" className="text-blue-500">
+                Login as Teacher
+              </Link>
+              <Link to="/staff-login" className="text-blue-500">
+                Login as Staff
+              </Link>
+            </div>
           </Form>
         </div>
       </div>

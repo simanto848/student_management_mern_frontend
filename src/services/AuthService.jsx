@@ -1,10 +1,11 @@
 import Cookies from "js-cookie";
-import { toast } from "react-hot-toast";
+import { message } from "antd";
 import { cookieName, setUserCookie } from "./Cookies";
 
+// TODO: Implement Context API for user authentication and authorization
 export const login = async (formData, navigate) => {
   if (!formData.email || !formData.password) {
-    return toast.error("Please fill out all fields.");
+    return message.error("Please fill out all fields.");
   }
 
   try {
@@ -15,29 +16,29 @@ export const login = async (formData, navigate) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      return toast.error(data.message);
+      return message.error(data.message);
     }
 
     setUserCookie(data.user);
 
     navigate("/dashboard");
   } catch (error) {
-    toast.error(error.message);
+    message.error(error.message);
   }
 };
 
 export const signOut = async (navigate) => {
   try {
     const res = await fetch("/api/auth/sign-out", {
-      method: "POST",
+      method: "GET",
     });
     const data = await res.json();
     if (!res.ok) {
-      return toast.error(data.message);
+      return message.error(data.message);
     }
     Cookies.remove(cookieName);
     navigate("/");
   } catch (error) {
-    return toast.error(error.message);
+    return message.error(error.message);
   }
 };
