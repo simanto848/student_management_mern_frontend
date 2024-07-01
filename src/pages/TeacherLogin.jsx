@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/AuthService";
+import { teacherLogin } from "../services/AuthService";
 
 export default function TeacherLogin() {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ export default function TeacherLogin() {
   };
 
   const handleSubmit = async () => {
-    await login(formData, navigate);
+    await teacherLogin(formData, navigate);
   };
 
   return (

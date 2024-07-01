@@ -73,7 +73,7 @@ export default function Teachers() {
       key: "actions",
       render: (_, record) => (
         <div className="flex flex-row gap-1">
-          <Link to={`/update-teacher/${record.key}`}>
+          <Link to={`/admin/update-teacher/${record.key}`}>
             <Button
               size="small"
               icon={<EditOutlined />}
@@ -117,7 +117,7 @@ export default function Teachers() {
             size="large"
             type="primary"
           >
-            <Link to="/create-teacher">Add Teacher</Link>
+            <Link to="/admin/create-teacher">Add Teacher</Link>
           </Button>
         </div>
         <Table columns={columns} dataSource={data} loading={loading} />{" "}

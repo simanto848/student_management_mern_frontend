@@ -28,7 +28,7 @@ export default function CreateTeacher() {
       if (res.ok) {
         message.success("Teacher added successfully");
         form.resetFields();
-        navigate("/teachers");
+        navigate("/admin/teachers");
       } else {
         message.error(res.message || "Failed to add teacher");
       }

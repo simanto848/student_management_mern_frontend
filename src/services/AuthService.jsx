@@ -27,6 +27,29 @@ export const login = async (formData, navigate) => {
   }
 };
 
+export const teacherLogin = async (formData, navigate) => {
+  if (!formData.email || !formData.password) {
+    return message.error("Please fill out all fields.");
+  }
+  try {
+    const res = await fetch("/api/auth/teacher-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      return message.error(data.message);
+    }
+
+    setUserCookie(data.user);
+
+    navigate("/teacher-dashboard");
+  } catch (error) {
+    message.error(error.message);
+  }
+};
+
 export const signOut = async (navigate) => {
   try {
     const res = await fetch("/api/auth/sign-out", {
