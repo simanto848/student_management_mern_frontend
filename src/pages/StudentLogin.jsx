@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/AuthService";
@@ -9,7 +9,21 @@ export default function StudentLogin() {
     password: "",
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("studentEmail");
+    const savedPassword = localStorage.getItem("studentPassword");
+
+    if (savedEmail && savedPassword) {
+      setFormData({
+        email: savedEmail,
+        password: savedPassword,
+      });
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -19,7 +33,18 @@ export default function StudentLogin() {
     });
   };
 
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
   const handleSubmit = async () => {
+    if (rememberMe) {
+      localStorage.setItem("studentEmail", formData.email);
+      localStorage.setItem("studentPassword", formData.password);
+    } else {
+      localStorage.removeItem("studentEmail");
+      localStorage.removeItem("studentPassword");
+    }
     await login(formData, navigate);
   };
 
@@ -78,7 +103,9 @@ export default function StudentLogin() {
               />
             </Form.Item>
             <Form.Item>
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox checked={rememberMe} onChange={handleRememberMeChange}>
+                Remember me
+              </Checkbox>
             </Form.Item>
             <Form.Item>
               <Link to="/forgot-password" className="text-blue-500">

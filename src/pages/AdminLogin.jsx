@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/AuthService";
@@ -9,7 +9,23 @@ export default function AdminLogin() {
     password: "",
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
+  const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+
+    if (savedEmail && savedPassword) {
+      setFormData({
+        email: savedEmail,
+        password: savedPassword,
+      });
+      setRememberMe(true);
+      form.setFieldsValue({ email: savedEmail, password: savedPassword });
+    }
+  }, [form]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -19,7 +35,18 @@ export default function AdminLogin() {
     });
   };
 
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
   const handleSubmit = async () => {
+    if (rememberMe) {
+      localStorage.setItem("email", formData.email);
+      localStorage.setItem("password", formData.password);
+    } else {
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+    }
     await login(formData, navigate);
   };
 
@@ -42,6 +69,7 @@ export default function AdminLogin() {
         {/* right */}
         <div className="flex-1 bg-white ml-10 p-8 shadow-lg rounded-lg">
           <Form
+            form={form}
             className="flex flex-col gap-4"
             onFinish={handleSubmit}
             layout="vertical"
@@ -78,7 +106,9 @@ export default function AdminLogin() {
               />
             </Form.Item>
             <Form.Item>
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox checked={rememberMe} onChange={handleRememberMeChange}>
+                Remember me
+              </Checkbox>
             </Form.Item>
             <Form.Item>
               <Link to="/forgot-password" className="text-blue-500">
