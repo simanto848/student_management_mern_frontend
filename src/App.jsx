@@ -13,6 +13,7 @@ import { useState } from "react";
 import AdminLogin from "./pages/AdminLogin";
 import TeacherLogin from "./pages/TeacherLogin";
 import StaffLogin from "./pages/StaffLogin";
+import TeacherRoutes from "./routes/TeacherRoutes";
 
 const { Content } = Layout;
 
@@ -45,6 +46,7 @@ export const App = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
                 {AdminRoutes()}
+                {TeacherRoutes()}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Content>

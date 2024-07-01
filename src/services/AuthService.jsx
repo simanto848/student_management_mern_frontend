@@ -44,7 +44,7 @@ export const teacherLogin = async (formData, navigate) => {
 
     setUserCookie(data.user);
 
-    navigate("/teacher-dashboard");
+    navigate("/teacher/teacher-dashboard");
   } catch (error) {
     message.error(error.message);
   }
