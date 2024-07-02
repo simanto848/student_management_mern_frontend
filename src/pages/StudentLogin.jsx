@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/AuthService";
+import { studentLogin } from "../services/AuthService";
 
 export default function StudentLogin() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,7 @@ export default function StudentLogin() {
   });
 
   const [rememberMe, setRememberMe] = useState(false);
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,8 +23,9 @@ export default function StudentLogin() {
         password: savedPassword,
       });
       setRememberMe(true);
+      form.setFieldsValue({ email: savedEmail, password: savedPassword });
     }
-  }, []);
+  }, [form]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -45,7 +47,7 @@ export default function StudentLogin() {
       localStorage.removeItem("studentEmail");
       localStorage.removeItem("studentPassword");
     }
-    await login(formData, navigate);
+    await studentLogin(formData, navigate);
   };
 
   return (
@@ -67,6 +69,7 @@ export default function StudentLogin() {
         {/* right */}
         <div className="flex-1 bg-white ml-10 p-8 shadow-lg rounded-lg">
           <Form
+            form={form}
             className="flex flex-col gap-4"
             onFinish={handleSubmit}
             layout="vertical"
