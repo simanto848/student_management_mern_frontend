@@ -1,4 +1,5 @@
 import CardComponent from "../components/CardComponent";
+// import { getUserFromCookie } from "../services/Cookies";
 
 export default function Dashboard() {
   return (

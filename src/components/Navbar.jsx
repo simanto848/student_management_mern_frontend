@@ -15,6 +15,7 @@ export default function Navbar({ toggleDrawer }) {
           </Title>
         </Link>
       </div>
+
       <Button
         className="lg:hidden"
         icon={<MenuOutlined />}

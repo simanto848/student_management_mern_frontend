@@ -5,5 +5,5 @@ import { Navigate, Outlet } from "react-router-dom";
 
 export default function OnlyTeacherRoutes() {
   const currentUser = getUserFromCookie();
-  return currentUser.role === "teacher" ? <Outlet /> : <Navigate to="/" />;
+  return currentUser.role === "Teacher" ? <Outlet /> : <Navigate to="/" />;
 }

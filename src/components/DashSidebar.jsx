@@ -8,8 +8,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getUserFromCookie } from "../services/Cookies";
 import { signOut } from "../services/AuthService";
 
-const { SubMenu } = Menu;
-
 // eslint-disable-next-line react/prop-types
 const DashSidebar = ({ drawerVisible, toggleDrawer }) => {
   const currentUser = getUserFromCookie();
@@ -20,69 +18,119 @@ const DashSidebar = ({ drawerVisible, toggleDrawer }) => {
     signOut(navigate);
   };
 
+  const adminMenuItems = [
+    {
+      label: <Link to="/admin/faculties">Faculties</Link>,
+      key: "/admin/faculties",
+    },
+    {
+      label: <Link to="/admin/departments">Departments</Link>,
+      key: "/admin/departments",
+    },
+    {
+      label: <Link to="/admin/teachers">Teachers</Link>,
+      key: "/admin/teachers",
+    },
+    {
+      label: <Link to="/admin/sessions">Sessions</Link>,
+      key: "/admin/sessions",
+    },
+    { label: <Link to="/admin/batches">Batches</Link>, key: "/admin/batches" },
+    { label: <Link to="/admin/courses">Courses</Link>, key: "/admin/courses" },
+    {
+      label: <Link to="/admin/session-courses">Session Courses</Link>,
+      key: "/admin/session-courses",
+    },
+    {
+      label: <Link to="/admin/students">Students</Link>,
+      key: "/admin/students",
+    },
+    {
+      label: <Link to="/admin/student-enrolments">Student Enrolments</Link>,
+      key: "/admin/student-enrolments",
+    },
+  ];
+
+  const teacherMenuItems = [
+    {
+      label: <Link to="/teacher/courses">Courses</Link>,
+      key: "/teacher/courses",
+    },
+    {
+      label: <Link to="/teacher/students">Students</Link>,
+      key: "/teacher/students",
+    },
+    {
+      label: <Link to="/teacher/attendance">Attendance</Link>,
+      key: "/teacher/attendance",
+    },
+    {
+      label: <Link to="/teacher/assignments">Assignments</Link>,
+      key: "/teacher/assignments",
+    },
+    {
+      label: <Link to="/teacher/grades">Grades</Link>,
+      key: "/teacher/grades",
+    },
+  ];
+
+  const menuItems = [
+    {
+      label: <Link to="/">Dashboard</Link>,
+      key: "/",
+      icon: <PieChartOutlined />,
+    },
+    ...(currentUser && currentUser.role === "admin"
+      ? [
+          {
+            label: "More",
+            key: "sub1",
+            icon: <UserOutlined />,
+            children: adminMenuItems,
+          },
+        ]
+      : []),
+    ...(currentUser && currentUser.role === "Teacher"
+      ? [
+          {
+            label: "More",
+            key: "sub2",
+            icon: <UserOutlined />,
+            children: teacherMenuItems,
+          },
+        ]
+      : []),
+    {
+      label: <Link to="/inbox">Inbox</Link>,
+      key: "/inbox",
+      icon: <InboxOutlined />,
+    },
+    {
+      label: "Sign Out",
+      key: "signout",
+      icon: <UserOutlined />,
+      onClick: handleSignOut,
+    },
+  ];
+
   return (
     <>
-      <Drawer
-        title="Menu"
-        placement="left"
-        onClose={toggleDrawer}
-        open={drawerVisible}
-        className="lg:hidden"
-      >
-        <Menu
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          style={{ height: "100%", borderRight: 0 }}
+      {currentUser && (
+        <Drawer
+          title="Menu"
+          placement="left"
+          onClose={toggleDrawer}
+          open={drawerVisible}
+          className="lg:hidden"
         >
-          <Menu.Item key="/" icon={<PieChartOutlined />}>
-            <Link to="/">Dashboard</Link>
-          </Menu.Item>
-
-          {currentUser && currentUser.role === "admin" && (
-            <SubMenu key="sub1" icon={<UserOutlined />} title="Details">
-              <Menu.Item key="/admin/faculties">
-                <Link to="/admin/faculties">Faculties</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/departments">
-                <Link to="/admin/departments">Departments</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/teachers">
-                <Link to="/admin/teachers">Teachers</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/sessions">
-                <Link to="/admin/sessions">Sessions</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/batches">
-                <Link to="/admin/batches">Batches</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/courses">
-                <Link to="/admin/courses">Courses</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/session-courses">
-                <Link to="/admin/session-courses">Session Courses</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/students">
-                <Link to="/admin/students">Students</Link>
-              </Menu.Item>
-              <Menu.Item key="/admin/student-enrolments">
-                <Link to="/admin/student-enrolments">Student Enrolments</Link>
-              </Menu.Item>
-            </SubMenu>
-          )}
-
-          <Menu.Item key="/inbox" icon={<InboxOutlined />}>
-            <Link to="/inbox">Inbox</Link>
-          </Menu.Item>
-
-          <Menu.Item
-            key="signout"
-            icon={<UserOutlined />}
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </Menu.Item>
-        </Menu>
-      </Drawer>
+          <Menu
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            items={menuItems}
+            style={{ height: "100%", borderRight: 0 }}
+          />
+        </Drawer>
+      )}
     </>
   );
 };
