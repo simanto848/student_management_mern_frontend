@@ -80,7 +80,7 @@ export default function Courses() {
       title: "Actions",
       render: (text, record) => (
         <span>
-          <Link to={`/update-course/${record._id}`}>
+          <Link to={`/admin/update-course/${record._id}`}>
             <Button size="small" className="mr-2">
               <EditOutlined />
             </Button>
@@ -105,7 +105,7 @@ export default function Courses() {
             Course List
           </h1>
           <Button className="mr-2">
-            <Link to="/create-course">
+            <Link to="/admin/create-course">
               <PlusOutlined />
               Add Course
             </Link>

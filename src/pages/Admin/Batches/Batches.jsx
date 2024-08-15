@@ -103,7 +103,7 @@ export default function Batches() {
             Batch List
           </h1>
           <Button className="mr-2">
-            <Link to="/batch/add">Add Batch</Link>
+            <Link to="/admin/batch/add">Add Batch</Link>
           </Button>
         </div>
         <Table dataSource={batches} rowKey="_id">

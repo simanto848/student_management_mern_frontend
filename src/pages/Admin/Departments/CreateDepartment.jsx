@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, Form, Input, Select, message } from "antd";
 import { createDepartment } from "../../../services/DepartmentService";
 import { fetchFaculties } from "../../../services/FacultyService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
 
 const { Option } = Select;
@@ -54,7 +54,7 @@ export default function CreateDepartment() {
             onFinish={handleSubmit}
             initialValues={{ facultyId: "" }}
             layout="vertical"
-            className="max-w-md mx-auto"
+            className="max-w-md mx-auto border shadow-md p-4 rounded-md"
           >
             <Form.Item
               label="Department Short Name"
@@ -68,7 +68,9 @@ export default function CreateDepartment() {
             >
               <Input
                 value={shortName}
+                size="large"
                 onChange={(e) => setShortName(e.target.value)}
+                autoComplete="on"
               />
             </Form.Item>
             <Form.Item
@@ -76,7 +78,7 @@ export default function CreateDepartment() {
               name="facultyId"
               rules={[{ required: true, message: "Please select faculty!" }]}
             >
-              <Select>
+              <Select size="large">
                 <Option value="">Please select faculty</Option>
                 {faculties.map((faculty) => (
                   <Option key={faculty._id} value={faculty._id}>
@@ -92,6 +94,15 @@ export default function CreateDepartment() {
                 className="w-full text-blue-600 border-blue-600"
               >
                 Add
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full text-blue-600 border-blue-600"
+              >
+                <Link to="/admin/departments">Cancel</Link>
               </Button>
             </Form.Item>
           </Form>

@@ -120,7 +120,7 @@ export default function CreateBatch() {
                 Add Batch
               </Button>
               <Button className="w-full mt-2">
-                <Link to="/batches">Cancel</Link>
+                <Link to="/admin/batches">Cancel</Link>
               </Button>
             </Form.Item>
           </Form>

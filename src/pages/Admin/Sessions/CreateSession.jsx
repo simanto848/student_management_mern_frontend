@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { Button, Form, Input, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createSession } from "../../../services/SessionService";
 import Loading from "../../../components/Loading";
 
@@ -41,7 +41,7 @@ export default function CreateSession() {
         ) : (
           <Form
             onFinish={handleSubmit}
-            className="max-w-md mx-auto"
+            className="max-w-md mx-auto border p-4 shadow-md rounded-md"
             layout="vertical"
           >
             <Item
@@ -51,12 +51,18 @@ export default function CreateSession() {
             >
               <Input
                 value={session}
+                size="large"
                 onChange={(e) => setSession(e.target.value)}
               />
             </Item>
             <Item>
-              <Button htmlType="submit" className="w-full">
+              <Button size="large" htmlType="submit" className="w-full">
                 Add
+              </Button>
+            </Item>
+            <Item>
+              <Button size="large" htmlType="submit" className="w-full">
+                <Link to="/admin/sessions">Cancel</Link>
               </Button>
             </Item>
           </Form>

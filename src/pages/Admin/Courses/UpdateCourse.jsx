@@ -23,28 +23,32 @@ const UpdateCourse = () => {
     const fetchData = async () => {
       try {
         const courseData = await fetchCourseById(courseId);
-        form.setFieldsValue({
-          name: courseData.name,
-          code: courseData.code,
-          creditHours: courseData.creditHours,
-          semester: courseData.semester,
-          facultyId: courseData.facultyId,
-          departmentId: courseData.departmentId,
-          maintainable: courseData.maintainable,
-        });
-
-        setSelectedFacultyId(courseData.departmentId.facultyId);
-
         const facultiesData = await fetchFaculties();
-        setFaculties(facultiesData);
 
-        if (courseData.facultyId) {
-          const departmentsData = await fetchDepartmentsByFaculty(
-            courseData.facultyId
-          );
-          setDepartments(departmentsData.data);
+        if (courseData && facultiesData) {
+          setFaculties(facultiesData);
+          setSelectedFacultyId(courseData.departmentId.facultyId);
+
+          if (courseData.facultyId) {
+            const departmentsData = await fetchDepartmentsByFaculty(
+              courseData.facultyId
+            );
+            setDepartments(departmentsData.data);
+          }
+
+          form.setFieldsValue({
+            name: courseData.name,
+            code: courseData.code,
+            creditHours: courseData.creditHours,
+            semester: courseData.semester,
+            facultyId: courseData.facultyId,
+            departmentId: courseData.departmentId,
+            maintainable: courseData.maintainable,
+          });
         }
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         message.error(error.message);
       }
     };
@@ -63,18 +67,19 @@ const UpdateCourse = () => {
   };
 
   const onFinish = async (values) => {
+    setLoading(true);
     try {
       const res = await updateCourse(courseId, values);
       if (res.ok !== undefined && res.ok === false) {
         const data = await res.json();
         throw new Error(data.message || "Failed to update course");
       }
-      setLoading(false);
       message.success("Course updated successfully");
       navigate("/courses");
     } catch (error) {
-      setLoading(false);
       message.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,28 +113,28 @@ const UpdateCourse = () => {
               name="name"
               rules={[{ required: true, message: "Please enter course name" }]}
             >
-              <Input placeholder="Course Name" />
+              <Input placeholder="Course Name" size="large" />
             </Form.Item>
             <Form.Item
               label="Course Code"
               name="code"
               rules={[{ required: true, message: "Please enter course code" }]}
             >
-              <Input placeholder="Course Code" />
+              <Input placeholder="Course Code" size="large" />
             </Form.Item>
             <Form.Item
               label="Credit hour"
               name="creditHours"
               rules={[{ required: true, message: "Please enter credit hour" }]}
             >
-              <Input type="number" placeholder="Credit hour" />
+              <Input type="number" placeholder="Credit hour" size="large" />
             </Form.Item>
             <Form.Item
               label="Select Semester"
               name="semester"
               rules={[{ required: true, message: "Please select semester" }]}
             >
-              <Select placeholder="Select Semester">
+              <Select placeholder="Select Semester" size="large">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((semester) => (
                   <Option key={semester} value={semester}>
                     {semester}
@@ -145,6 +150,7 @@ const UpdateCourse = () => {
               <Select
                 placeholder="Select Faculty"
                 onChange={handleFacultyChange}
+                size="large"
               >
                 {faculties.map((faculty) => (
                   <Option key={faculty._id} value={faculty._id}>
@@ -158,7 +164,7 @@ const UpdateCourse = () => {
               name="departmentId"
               rules={[{ required: true, message: "Please select department" }]}
             >
-              <Select placeholder="Select Department">
+              <Select placeholder="Select Department" size="large">
                 {departments.map((department) => (
                   <Option key={department._id} value={department._id}>
                     {department.shortName}
@@ -173,7 +179,7 @@ const UpdateCourse = () => {
                 { required: true, message: "Please select course status" },
               ]}
             >
-              <Select placeholder="Select Course Status">
+              <Select placeholder="Select Course Status" size="large">
                 {[true, false].map((status) => (
                   <Option key={status} value={status}>
                     {status.toString()}
@@ -182,11 +188,16 @@ const UpdateCourse = () => {
               </Select>
             </Form.Item>
             <Form.Item>
-              <Button className="w-full" htmlType="submit">
+              <Button
+                className="w-full"
+                size="large"
+                htmlType="submit"
+                loading={loading}
+              >
                 Update Course
               </Button>
-              <Button className="w-full mt-2">
-                <Link to="/courses">Cancel</Link>
+              <Button className="w-full mt-2" size="large">
+                <Link to="/admin/courses">Cancel</Link>
               </Button>
             </Form.Item>
           </Form>

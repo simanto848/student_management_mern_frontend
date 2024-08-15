@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createTeacher } from "../../../services/TeacherService";
 import { fetchDepartmentsByFaculty } from "../../../services/DepartmentService";
 import { fetchFaculties } from "../../../services/FacultyService";
@@ -75,28 +75,28 @@ export default function CreateTeacher() {
               ]}
               label="Teacher Name"
             >
-              <Input placeholder="Teacher full name" />
+              <Input placeholder="Teacher full name" size="large" />
             </Form.Item>
             <Form.Item
               name="phone"
               rules={[{ required: true, message: "Phone number is required" }]}
               label="Phone Number"
             >
-              <Input placeholder="Phone number" />
+              <Input placeholder="Phone number" size="large" />
             </Form.Item>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Email is required" }]}
               label="Email"
             >
-              <Input type="email" placeholder="Email" />
+              <Input type="email" placeholder="Email" size="large" />
             </Form.Item>
             <Form.Item
               name="designation"
               rules={[{ required: true, message: "Designation is required" }]}
               label="Designation"
             >
-              <Input placeholder="Designation" />
+              <Input placeholder="Designation" size="large" />
             </Form.Item>
             <Form.Item
               name="facultyId"
@@ -108,6 +108,7 @@ export default function CreateTeacher() {
               <Select
                 placeholder="Select Faculty"
                 onChange={handleFacultyChange}
+                size="large"
               >
                 {faculties.map((faculty) => (
                   <Select.Option key={faculty._id} value={faculty._id}>
@@ -126,7 +127,7 @@ export default function CreateTeacher() {
               ]}
               label="Select Department"
             >
-              <Select placeholder="Select Department">
+              <Select placeholder="Select Department" size="large">
                 {departments.map((department) => (
                   <Select.Option key={department._id} value={department._id}>
                     {department.shortName}
@@ -137,6 +138,11 @@ export default function CreateTeacher() {
             <Form.Item>
               <Button htmlType="submit" size="large" block>
                 Add Teacher
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button type="default" size="large" block>
+                <Link to="/admin/teachers">Cancel</Link>
               </Button>
             </Form.Item>
           </Form>

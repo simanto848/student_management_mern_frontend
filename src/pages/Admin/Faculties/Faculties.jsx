@@ -119,7 +119,7 @@ export default function Faculties() {
             Faculty List
           </h1>
           <Button className="mr-2" size="large" type="primary" ghost>
-            <Link to="/create-faculty">
+            <Link to="/admin/create-faculty">
               <PlusOutlined /> Add Faculty
             </Link>
           </Button>

@@ -158,7 +158,7 @@ export default function Departments() {
               size="large"
               type="primary"
             >
-              <Link to="/create-department">
+              <Link to="/admin/create-department">
                 <PlusOutlined /> Add Department
               </Link>
             </Button>

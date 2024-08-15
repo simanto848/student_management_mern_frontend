@@ -84,7 +84,7 @@ export default function Sessions() {
             Session List
           </h1>
           <Button className="mr-2">
-            <Link to="/create-session">Add Session</Link>
+            <Link to="/admin/create-session">Add Session</Link>
           </Button>
         </div>
         {loading ? (
@@ -132,7 +132,7 @@ export default function Sessions() {
             <Button key="cancel" onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button key="update" type="primary" onClick={handleUpdate}>
+            <Button key="update" type="default" onClick={handleUpdate}>
               Update
             </Button>,
           ]}
