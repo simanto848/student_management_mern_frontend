@@ -85,11 +85,10 @@ export default function SessionCourse() {
       render: (text, record) => (
         <Select
           style={{ width: 200 }}
-          placeholder="Select a teacher"
-          defaultValue={record.teacherId}
+          placeholder="Please assign teacher"
+          value={record.teacherId || undefined}
           onChange={(value) => handleTeacherAssign(record._id, value)}
         >
-          {/* Todo - Add a default value for the select dropdown */}
           {teachers.map((teacher) => (
             <Select.Option key={teacher._id} value={teacher._id}>
               {teacher.name}
@@ -108,7 +107,7 @@ export default function SessionCourse() {
     department: sessionCourse.departmentId.shortName,
     courseName: sessionCourse.courseId.name,
     course: sessionCourse.courseId.code,
-    teacherId: sessionCourse.teacherId ? sessionCourse.teacherId._id : null,
+    teacherId: sessionCourse.teacherId ? sessionCourse.teacherId : null,
   }));
 
   return (
