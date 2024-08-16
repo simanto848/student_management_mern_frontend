@@ -35,13 +35,19 @@ export default function UpdateStudent() {
   const fetchData = async () => {
     try {
       const studentData = await fetchStudentById(studentId);
+      console.log(studentData);
+
       form.setFieldsValue({
         name: studentData.name,
         email: studentData.email,
         phoneNo: studentData.phoneNo,
         rollNo: studentData.rollNo,
-        departmentId: studentData.departmentId,
-        sessionId: studentData.sessionId,
+        departmentId: studentData.departmentId
+          ? studentData.departmentId._id
+          : "",
+        sessionId: studentData.batchId.sessionId
+          ? studentData.batchId.sessionId._id
+          : "",
         batchId: studentData.batchId.name,
         courseFee: studentData.courseFee,
       });
