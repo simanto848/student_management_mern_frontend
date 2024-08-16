@@ -5,6 +5,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { fetchCourses, deleteCourse } from "../../../services/CourseService";
 import Loading from "../../../components/Loading";
+import VoiceToTextRecognition from "../../../components/VoiceToTextRecognition";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -18,7 +19,6 @@ export default function Courses() {
   const fetchCoursesData = async () => {
     try {
       const data = await fetchCourses();
-
       setCourses(data);
       setLoading(false);
     } catch (error) {
@@ -37,6 +37,10 @@ export default function Courses() {
     } catch (error) {
       message.error("Failed to delete course!");
     }
+  };
+
+  const handleVoiceInput = (text) => {
+    setSearchText(text);
   };
 
   const columns = [
@@ -100,7 +104,8 @@ export default function Courses() {
       course.code.toLowerCase().includes(searchText.toLowerCase()) ||
       course.departmentId?.shortName
         .toLowerCase()
-        .includes(searchText.toLowerCase())
+        .includes(searchText.toLowerCase()) ||
+      course.semester.toString().includes(searchText.toLowerCase())
   );
 
   if (loading) {
@@ -114,12 +119,16 @@ export default function Courses() {
           <h1 className="text-slate-600 text-center text-3xl font-bold">
             Course List
           </h1>
-          <Input.Search
-            placeholder="Search courses by course name, code"
-            allowClear
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ width: 300, marginBottom: 16 }}
-          />
+          <div className="flex flex-col md:flex-row items-center md:items-center md:space-x-4 space-y-2 md:space-y-0">
+            <Input
+              placeholder="Search Faculties"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ marginRight: 8 }}
+              className="w-full md:w-auto"
+            />
+            <VoiceToTextRecognition onTranscript={handleVoiceInput} />
+          </div>
           <Button className="mr-2">
             <Link to="/admin/create-course">
               <PlusOutlined />
@@ -127,7 +136,16 @@ export default function Courses() {
             </Link>
           </Button>
         </div>
-        <Table dataSource={filteredCourses} columns={columns} rowKey="_id" />
+        <Table
+          dataSource={filteredCourses}
+          columns={columns}
+          rowKey="_id"
+          className="shadow-lg"
+          scroll={{ x: 768 }}
+          bordered
+          footer={() => `Total Courses: ${courses.length}`}
+          style={{ borderRadius: 8 }}
+        />
       </div>
     </div>
   );
