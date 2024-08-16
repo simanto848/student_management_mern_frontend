@@ -108,14 +108,14 @@ export default function AddStudent() {
               rules={[{ required: true, message: "Student Name is required" }]}
               label="Name"
             >
-              <Input placeholder="Enter Student Name" />
+              <Input placeholder="Enter Student Name" size="large" />
             </Form.Item>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Student email is required" }]}
               label="Email"
             >
-              <Input placeholder="Enter student email" />
+              <Input placeholder="Enter student email" size="large" />
             </Form.Item>
             <Form.Item
               name="phoneNo"
@@ -124,7 +124,7 @@ export default function AddStudent() {
               ]}
               label="Phone Number"
             >
-              <Input placeholder="Enter student phone number" />
+              <Input placeholder="Enter student phone number" size="large" />
             </Form.Item>
             <Form.Item
               name="rollNo"
@@ -133,7 +133,7 @@ export default function AddStudent() {
               ]}
               label="Roll Number"
             >
-              <Input placeholder="Enter student roll number" />
+              <Input placeholder="Enter student roll number" size="large" />
             </Form.Item>
             <Form.Item
               name="departmentId"
@@ -142,7 +142,7 @@ export default function AddStudent() {
               ]}
               label="Select Department"
             >
-              <Select placeholder="Please select Department">
+              <Select placeholder="Please select Department" size="large">
                 {departments.map((department) => (
                   <Select.Option key={department._id} value={department._id}>
                     {department.shortName}
@@ -159,6 +159,7 @@ export default function AddStudent() {
             >
               <Select
                 placeholder="Please select Session"
+                size="large"
                 onChange={handleSessionChange}
               >
                 {sessions.map((session) => (
@@ -175,7 +176,7 @@ export default function AddStudent() {
               ]}
               label="Select Batch"
             >
-              <Select placeholder="Please select Batch">
+              <Select placeholder="Please select Batch" size="large">
                 {batches.map((batch) => (
                   <Select.Option key={batch._id} value={batch._id}>
                     {batch.name}
@@ -190,6 +191,7 @@ export default function AddStudent() {
             >
               <InputNumber
                 placeholder="Enter Course Fee"
+                size="large"
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -205,6 +207,7 @@ export default function AddStudent() {
             >
               <InputNumber
                 placeholder="Enter Scholarship Percentage"
+                size="large"
                 min={0}
                 max={100}
                 formatter={(value) => `${value}%`}
@@ -213,10 +216,15 @@ export default function AddStudent() {
               />
             </Form.Item>
             <Form.Item>
-              <Button className="w-full" htmlType="submit" loading={loading}>
+              <Button
+                className="w-full"
+                size="large"
+                htmlType="submit"
+                loading={loading}
+              >
                 Add Student
               </Button>
-              <Button className="w-full mt-2">
+              <Button className="w-full mt-2" size="large">
                 <Link to="/admin/students">Cancel</Link>
               </Button>
             </Form.Item>

@@ -63,6 +63,7 @@ const CreateEnrolment = () => {
             <Form.Item name="semester" label="Semester">
               <Select
                 placeholder="Select semester"
+                size="large"
                 onChange={handleSemesterChange}
               >
                 {semester.map((semester) => (
@@ -83,6 +84,7 @@ const CreateEnrolment = () => {
               <InputNumber
                 style={{ width: "100%" }}
                 min={0}
+                size="large"
                 placeholder="Enter paid amount"
                 onChange={handlePaidAmountChange}
               />
@@ -100,6 +102,7 @@ const CreateEnrolment = () => {
             >
               <Select
                 placeholder="Select payment purpose"
+                size="large"
                 onChange={handlePurposeChange}
               >
                 {purpose.map((purpose) => (
@@ -111,7 +114,7 @@ const CreateEnrolment = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button htmlType="submit" loading={loading}>
+              <Button size="large" htmlType="submit" loading={loading}>
                 Submit
               </Button>
             </Form.Item>

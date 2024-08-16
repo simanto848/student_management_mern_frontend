@@ -123,14 +123,14 @@ export default function UpdateStudent() {
               rules={[{ required: true, message: "Student Name is required" }]}
               label="Name"
             >
-              <Input placeholder="Enter Student Name" />
+              <Input placeholder="Enter Student Name" size="large" />
             </Form.Item>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Student email is required" }]}
               label="Email"
             >
-              <Input placeholder="Enter student email" />
+              <Input placeholder="Enter student email" size="large" />
             </Form.Item>
             <Form.Item
               name="phoneNo"
@@ -139,7 +139,7 @@ export default function UpdateStudent() {
               ]}
               label="Phone Number"
             >
-              <Input placeholder="Enter student phone number" />
+              <Input placeholder="Enter student phone number" size="large" />
             </Form.Item>
             <Form.Item
               name="rollNo"
@@ -148,7 +148,7 @@ export default function UpdateStudent() {
               ]}
               label="Roll Number"
             >
-              <Input placeholder="Enter student roll number" />
+              <Input placeholder="Enter student roll number" size="large" />
             </Form.Item>
             <Form.Item
               name="departmentId"
@@ -157,7 +157,7 @@ export default function UpdateStudent() {
               ]}
               label="Select Department"
             >
-              <Select placeholder="Please select Department">
+              <Select placeholder="Please select Department" size="large">
                 {departments.map((department) => (
                   <Select.Option key={department._id} value={department._id}>
                     {department.shortName}
@@ -174,7 +174,8 @@ export default function UpdateStudent() {
             >
               <Select
                 placeholder="Please select Session"
-                onChange={handleSessionChange} // Handle session selection change
+                size="large"
+                onChange={handleSessionChange}
               >
                 {sessions.map((session) => (
                   <Select.Option key={session._id} value={session._id}>
@@ -190,7 +191,7 @@ export default function UpdateStudent() {
               ]}
               label="Select Batch"
             >
-              <Select placeholder="Please select Batch">
+              <Select placeholder="Please select Batch" size="large">
                 {batches.map((batch) => (
                   <Select.Option key={batch._id} value={batch._id}>
                     {batch.name}
@@ -203,13 +204,13 @@ export default function UpdateStudent() {
               rules={[{ required: true, message: "Course Fee is required" }]}
               label="Course Fee"
             >
-              <Input placeholder="Enter Course Fee" />
+              <Input placeholder="Enter Course Fee" size="large" />
             </Form.Item>
             <Form.Item>
-              <Button className="w-full" htmlType="submit">
+              <Button className="w-full" size="large" htmlType="submit">
                 Update Student
               </Button>
-              <Button className="w-full mt-2">
+              <Button className="w-full mt-2" size="large">
                 <Link to="/admin/students">Cancel</Link>
               </Button>
             </Form.Item>

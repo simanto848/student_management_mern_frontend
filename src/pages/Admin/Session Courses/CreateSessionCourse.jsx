@@ -182,6 +182,7 @@ export default function CreateSessionCourse() {
             >
               <Select
                 placeholder="Please select Faculty"
+                size="large"
                 onChange={handleFacultyChange}
               >
                 {faculties.map((faculty) => (
@@ -200,6 +201,7 @@ export default function CreateSessionCourse() {
             >
               <Select
                 placeholder="Please select Department"
+                size="large"
                 onChange={handleDepartmentChange}
                 disabled={departmentDisabled}
               >
@@ -219,6 +221,7 @@ export default function CreateSessionCourse() {
             >
               <Select
                 placeholder="Please select Session"
+                size="large"
                 onChange={handleSessionChange}
                 disabled={sessionDisabled}
               >
@@ -240,12 +243,14 @@ export default function CreateSessionCourse() {
                 </Checkbox.Group>
               </Form.Item>
             )}
-            <Form.Item className="flex flex-row justify-center items-center">
-              <Button htmlType="submit" className="mr-4">
+            <Form.Item>
+              <Button htmlType="submit" size="large" className="w-full">
                 Add Session Course
               </Button>
-              <Button>
-                <Link to="/session-courses">Back</Link>
+            </Form.Item>
+            <Form.Item>
+              <Button className="w-full" size="large">
+                <Link to="/admin/session-courses">Back</Link>
               </Button>
             </Form.Item>
           </Form>

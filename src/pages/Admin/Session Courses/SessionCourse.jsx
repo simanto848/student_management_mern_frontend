@@ -119,7 +119,7 @@ export default function SessionCourse() {
             Session Course
           </h1>
           <Button size="large">
-            <Link to="/create-session-course">Add Session Course</Link>
+            <Link to="/admin/create-session-course">Add Session Course</Link>
           </Button>
         </div>
         <div className="my-2 flex justify-center">
