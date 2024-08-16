@@ -1,4 +1,4 @@
-const BASE_URL = "/api/batch";
+const BASE_URL = "/api/admin/batch";
 
 export async function fetchBatches() {
   const respose = await fetch(BASE_URL);

@@ -1,4 +1,4 @@
-const BASE_URL = "/api/payment-details";
+const BASE_URL = "/api/admin/payment-details";
 
 export async function createPaymentDetails(paymentDetails, studentId) {
   const response = await fetch(`${BASE_URL}/${studentId}`, {

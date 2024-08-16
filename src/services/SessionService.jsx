@@ -1,4 +1,4 @@
-const BASE_URL = "/api/session";
+const BASE_URL = "/api/admin/session";
 
 export async function fetchSessions() {
   const response = await fetch(BASE_URL);

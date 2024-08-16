@@ -1,8 +1,9 @@
 import { message } from "antd";
+const BASE_URL = "/api/admin/department";
 
 export async function createDepartment(formData) {
   try {
-    const res = await fetch("/api/department/create", {
+    const res = await fetch(`${BASE_URL}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +22,7 @@ export async function createDepartment(formData) {
 
 export async function fetchDepartments() {
   try {
-    const res = await fetch("/api/department");
+    const res = await fetch(BASE_URL);
     if (!res.ok) {
       message.error("Failed to fetch departments");
       return [];
@@ -36,7 +37,7 @@ export async function fetchDepartments() {
 
 export async function deleteDepartment(departmentId) {
   try {
-    const res = await fetch(`/api/department/delete/${departmentId}`, {
+    const res = await fetch(`${BASE_URL}/delete/${departmentId}`, {
       method: "DELETE",
     });
     const data = await res.json();
@@ -53,7 +54,7 @@ export async function deleteDepartment(departmentId) {
 
 export async function fetchDepartmentDetails(departmentId) {
   try {
-    const res = await fetch(`/api/department/${departmentId}`, {
+    const res = await fetch(`${BASE_URL}/${departmentId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +73,7 @@ export async function fetchDepartmentDetails(departmentId) {
 
 export async function updateDepartment(departmentId, formData) {
   try {
-    const res = await fetch(`/api/department/update/${departmentId}`, {
+    const res = await fetch(`${BASE_URL}/update/${departmentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -92,7 +93,7 @@ export async function updateDepartment(departmentId, formData) {
 
 export async function fetchDepartmentsByFaculty(facultyId) {
   try {
-    const res = await fetch(`/api/department/faculty/${facultyId}`);
+    const res = await fetch(`${BASE_URL}/faculty/${facultyId}`);
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message);

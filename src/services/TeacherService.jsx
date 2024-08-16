@@ -1,6 +1,8 @@
+const BASE_URL = "/api/admin/teacher";
+
 export async function createTeacher(formData) {
   try {
-    const res = await fetch("/api/teacher/create", {
+    const res = await fetch(`${BASE_URL}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +21,7 @@ export async function createTeacher(formData) {
 
 export async function fetchTeachers() {
   try {
-    const res = await fetch("/api/teacher");
+    const res = await fetch(BASE_URL);
     if (!res.ok) {
       throw new Error("Failed to fetch teachers");
     }
@@ -31,7 +33,7 @@ export async function fetchTeachers() {
 
 export async function fetchTeacherById(teacherId) {
   try {
-    const res = await fetch(`/api/teacher/${teacherId}`);
+    const res = await fetch(`${BASE_URL}/${teacherId}`);
     if (!res.ok) {
       throw new Error("Failed to fetch teacher");
     }
@@ -43,7 +45,7 @@ export async function fetchTeacherById(teacherId) {
 
 export async function updateTeacher(teacherId, formData) {
   try {
-    const res = await fetch(`/api/teacher/update/${teacherId}`, {
+    const res = await fetch(`${BASE_URL}/update/${teacherId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +65,7 @@ export async function updateTeacher(teacherId, formData) {
 
 export async function deleteTeacher(teacherId) {
   try {
-    const res = await fetch(`/api/teacher/delete/${teacherId}`, {
+    const res = await fetch(`${BASE_URL}/delete/${teacherId}`, {
       method: "DELETE",
     });
     const data = await res.json();

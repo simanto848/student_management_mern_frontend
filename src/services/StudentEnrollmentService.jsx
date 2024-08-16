@@ -1,4 +1,4 @@
-const BASE_URL = "/api/student-enrollment";
+const BASE_URL = "/api/admin/student-enrollment";
 
 export async function createEnrollment(enrollment, studentId) {
   const response = await fetch(`${BASE_URL}/${studentId}`, {

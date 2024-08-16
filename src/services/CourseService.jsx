@@ -1,4 +1,4 @@
-const BASE_URL = "/api/course";
+const BASE_URL = "/api/admin/course";
 
 export async function fetchCourses() {
   const response = await fetch(BASE_URL);

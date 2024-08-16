@@ -1,4 +1,4 @@
-const BASE_URL = "/api/session-courses";
+const BASE_URL = "/api/admin/session-courses";
 
 export async function fetchSessionCoursesBySessionId(sessionId) {
   try {

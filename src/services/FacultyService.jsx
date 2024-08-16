@@ -1,6 +1,8 @@
+const BASE_URL = "/api/admin/faculty";
+
 export const fetchFaculties = async () => {
   try {
-    const res = await fetch("/api/faculty");
+    const res = await fetch(BASE_URL);
     if (!res.ok) {
       throw new Error("Failed to fetch faculties");
     }
@@ -13,7 +15,7 @@ export const fetchFaculties = async () => {
 
 export const addFaculty = async (name) => {
   try {
-    const res = await fetch("/api/faculty/create", {
+    const res = await fetch(`${BASE_URL}/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +34,7 @@ export const addFaculty = async (name) => {
 
 export const updateFaculty = async (facultyId, name) => {
   try {
-    const res = await fetch(`/api/faculty/update/${facultyId}`, {
+    const res = await fetch(`${BASE_URL}/update/${facultyId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +53,7 @@ export const updateFaculty = async (facultyId, name) => {
 
 export const deleteFaculty = async (facultyId) => {
   try {
-    const res = await fetch(`/api/faculty/delete/${facultyId}`, {
+    const res = await fetch(`${BASE_URL}/delete/${facultyId}`, {
       method: "DELETE",
     });
     const data = await res.json();
