@@ -35,7 +35,6 @@ export default function UpdateStudent() {
   const fetchData = async () => {
     try {
       const studentData = await fetchStudentById(studentId);
-      console.log(studentData);
 
       form.setFieldsValue({
         name: studentData.name,
@@ -48,9 +47,13 @@ export default function UpdateStudent() {
         sessionId: studentData.batchId.sessionId
           ? studentData.batchId.sessionId._id
           : "",
-        batchId: studentData.batchId.name,
+        batchId: studentData.batchId ? studentData.batchId._id : "",
         courseFee: studentData.courseFee,
       });
+
+      setSelectedSession(
+        studentData.batchId.sessionId ? studentData.batchId.sessionId._id : ""
+      );
     } catch (error) {
       message.error(error.message);
     }
@@ -85,6 +88,8 @@ export default function UpdateStudent() {
 
   const onFinish = async (values) => {
     try {
+      console.log("VALUES: ", values);
+
       const res = await updateStudent(studentId, values);
       if (res.ok === false) {
         throw new Error("Failed to update student");
