@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Table, Modal, Form, Input, message } from "antd";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
@@ -10,17 +9,28 @@ import {
   fetchFaculties,
 } from "../../../services/FacultyService";
 import Loading from "../../../components/Loading";
+import VoiceToTextRecognition from "../../../components/VoiceToTextRecognition";
 
 export default function Faculties() {
   const [faculties, setFaculties] = useState([]);
+  const [filteredFaculties, setFilteredFaculties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingFaculty, setEditingFaculty] = useState(null);
   const [form] = Form.useForm();
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setFilteredFaculties(
+      faculties.filter((faculty) =>
+        faculty.name.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [searchText, faculties]);
 
   const fetchData = async () => {
     try {
@@ -32,6 +42,10 @@ export default function Faculties() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleVoiceInput = (transcript) => {
+    setSearchText(transcript);
   };
 
   const handleEdit = (faculty) => {
@@ -95,7 +109,7 @@ export default function Faculties() {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <div>
+        <div className="flex gap-2">
           <Button
             icon={<EditOutlined />}
             size="small"
@@ -112,23 +126,39 @@ export default function Faculties() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="overflow-x-auto flex-1">
-        <div className="my-2 flex justify-between flex-wrap">
-          <h1 className="text-slate-600 text-center text-3xl font-bold">
+    <div className="min-h-screen flex flex-col">
+      <div className="overflow-x-auto flex-1 p-4">
+        <div className="flex flex-col md:flex-row md:justify-between items-center mb-4">
+          <h1 className="text-slate-600 text-center text-2xl md:text-3xl font-bold mb-4 md:mb-0">
             Faculty List
           </h1>
-          <Button className="mr-2" size="large" type="primary" ghost>
+          <div className="flex flex-col md:flex-row items-center md:items-center md:space-x-4 space-y-2 md:space-y-0">
+            <Input
+              placeholder="Search Faculties"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ marginRight: 8 }}
+              className="w-full md:w-auto"
+            />
+            <VoiceToTextRecognition onTranscript={handleVoiceInput} />
+          </div>
+          <Button
+            className="text-blue-600 border-blue-600"
+            size="large"
+            type="primary"
+            ghost
+            style={{ marginTop: 8, width: "100%", maxWidth: "200px" }}
+          >
             <Link to="/admin/create-faculty">
               <PlusOutlined /> Add Faculty
             </Link>
           </Button>
         </div>
-        {loading ? ( // Render Loading component when loading state is true
+        {loading ? (
           <Loading />
         ) : (
           <Table
-            dataSource={faculties}
+            dataSource={filteredFaculties}
             columns={columns}
             loading={loading}
             pagination={{ pageSize: 10 }}
