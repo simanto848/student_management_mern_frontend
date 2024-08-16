@@ -16,28 +16,31 @@ const UpdateTeacher = () => {
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedFacultyId, setSelectedFacultyId] = useState("");
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState("");
   const { teacherId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const teacherData = await fetchTeacherById(teacherId);
+
         form.setFieldsValue({
           name: teacherData.name,
           phone: teacherData.phone,
           email: teacherData.email,
           designation: teacherData.designation,
-          facultyId: teacherData.facultyId,
-          departmentId: teacherData.departmentId,
+          facultyId: teacherData.facultyId._id,
+          departmentId: teacherData.departmentId._id,
           status: teacherData.status,
         });
 
-        setSelectedFacultyId(teacherData.facultyId);
-        setSelectedDepartmentId(teacherData.departmentId);
-
+        setSelectedFacultyId(teacherData.facultyId._id);
         const facultiesData = await fetchFaculties();
         setFaculties(facultiesData);
+
+        const departmentsData = await fetchDepartmentsByFaculty(
+          teacherData.facultyId._id
+        );
+        setDepartments(departmentsData.data);
       } catch (error) {
         message.error(error.message);
       }
@@ -58,26 +61,15 @@ const UpdateTeacher = () => {
 
   const onFinish = async (values) => {
     try {
-      const res = await updateTeacher(teacherId, values);
+      const res = await updateTeacher(teacherId, {
+        ...values,
+        facultyId: values.facultyId,
+        departmentId: values.departmentId,
+      });
       if (!res.ok) {
         throw new Error("Failed to update teacher");
       }
       message.success("Teacher updated successfully");
-
-      const updatedTeacherData = await fetchTeacherById(teacherId);
-
-      form.setFieldsValue({
-        name: updatedTeacherData.name,
-        phone: updatedTeacherData.phone,
-        email: updatedTeacherData.email,
-        designation: updatedTeacherData.designation,
-        facultyId: updatedTeacherData.facultyId,
-        departmentId: updatedTeacherData.departmentId,
-        status: updatedTeacherData.status,
-      });
-
-      setSelectedFacultyId(updatedTeacherData.facultyId);
-      setSelectedDepartmentId(updatedTeacherData.departmentId);
     } catch (error) {
       message.error(error.message);
     }
@@ -90,20 +82,7 @@ const UpdateTeacher = () => {
           <h1 className="text-slate-600 text-center text-3xl font-bold mb-4">
             Update Teacher
           </h1>
-          <Form
-            form={form}
-            onFinish={onFinish}
-            layout="vertical"
-            initialValues={{
-              name: "",
-              phone: "",
-              email: "",
-              designation: "",
-              facultyId: selectedFacultyId,
-              departmentId: selectedDepartmentId,
-              status: "",
-            }}
-          >
+          <Form form={form} onFinish={onFinish} layout="vertical">
             <Form.Item
               label="Teacher Name"
               name="name"
@@ -111,7 +90,7 @@ const UpdateTeacher = () => {
                 { required: true, message: "Please input the teacher's name!" },
               ]}
             >
-              <Input placeholder="Teacher full name" />
+              <Input placeholder="Teacher full name" size="large" />
             </Form.Item>
             <Form.Item
               label="Phone Number"
@@ -120,14 +99,14 @@ const UpdateTeacher = () => {
                 { required: true, message: "Please input the phone number!" },
               ]}
             >
-              <Input placeholder="Phone number" />
+              <Input placeholder="Phone number" size="large" />
             </Form.Item>
             <Form.Item
               label="Email"
               name="email"
               rules={[{ required: true, message: "Please input the email!" }]}
             >
-              <Input type="email" placeholder="Email" />
+              <Input type="email" placeholder="Email" size="large" />
             </Form.Item>
             <Form.Item
               label="Designation"
@@ -136,14 +115,14 @@ const UpdateTeacher = () => {
                 { required: true, message: "Please input the designation!" },
               ]}
             >
-              <Input placeholder="Designation" />
+              <Input placeholder="Designation" size="large" />
             </Form.Item>
             <Form.Item
               label="Status"
               name="status"
               rules={[{ required: true, message: "Please input the status!" }]}
             >
-              <Input placeholder="Status" />
+              <Input placeholder="Status" size="large" />
             </Form.Item>
             <Form.Item
               label="Select Faculty"
@@ -154,6 +133,7 @@ const UpdateTeacher = () => {
             >
               <Select
                 placeholder="Select Faculty"
+                size="large"
                 onChange={handleFacultyChange}
               >
                 {faculties.map((faculty) => (
@@ -170,7 +150,7 @@ const UpdateTeacher = () => {
                 { required: true, message: "Please select the department!" },
               ]}
             >
-              <Select placeholder="Select Department">
+              <Select placeholder="Select Department" size="large">
                 {departments.map((department) => (
                   <Option key={department._id} value={department._id}>
                     {department.shortName}

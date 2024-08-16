@@ -10,6 +10,7 @@ export default function CreateTeacher() {
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function CreateTeacher() {
   }, [selectedFaculty]);
 
   const onFinish = async (formData) => {
+    setLoading(true);
     try {
       const res = await createTeacher(formData);
       if (res.ok) {
@@ -34,6 +36,8 @@ export default function CreateTeacher() {
       }
     } catch (error) {
       message.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,7 +140,7 @@ export default function CreateTeacher() {
               </Select>
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit" size="large" block>
+              <Button htmlType="submit" size="large" block loading={loading}>
                 Add Teacher
               </Button>
             </Form.Item>
