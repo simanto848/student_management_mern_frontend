@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Button, Table, message } from "antd";
+import { useState, useEffect } from "react";
+import { Input, Button, Table, message } from "antd";
 import { Link } from "react-router-dom";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -10,6 +9,7 @@ import Loading from "../../../components/Loading";
 export default function Courses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchCoursesData();
@@ -18,6 +18,7 @@ export default function Courses() {
   const fetchCoursesData = async () => {
     try {
       const data = await fetchCourses();
+
       setCourses(data);
       setLoading(false);
     } catch (error) {
@@ -93,6 +94,15 @@ export default function Courses() {
     },
   ];
 
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      course.code.toLowerCase().includes(searchText.toLowerCase()) ||
+      course.departmentId?.shortName
+        .toLowerCase()
+        .includes(searchText.toLowerCase())
+  );
+
   if (loading) {
     return <Loading />;
   }
@@ -104,6 +114,12 @@ export default function Courses() {
           <h1 className="text-slate-600 text-center text-3xl font-bold">
             Course List
           </h1>
+          <Input.Search
+            placeholder="Search courses by course name, code"
+            allowClear
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ width: 300, marginBottom: 16 }}
+          />
           <Button className="mr-2">
             <Link to="/admin/create-course">
               <PlusOutlined />
@@ -111,7 +127,7 @@ export default function Courses() {
             </Link>
           </Button>
         </div>
-        <Table dataSource={courses} columns={columns} rowKey="_id" />
+        <Table dataSource={filteredCourses} columns={columns} rowKey="_id" />
       </div>
     </div>
   );

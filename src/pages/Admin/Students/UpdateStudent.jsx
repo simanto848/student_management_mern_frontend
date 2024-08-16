@@ -88,8 +88,6 @@ export default function UpdateStudent() {
 
   const onFinish = async (values) => {
     try {
-      console.log("VALUES: ", values);
-
       const res = await updateStudent(studentId, values);
       if (res.ok === false) {
         throw new Error("Failed to update student");

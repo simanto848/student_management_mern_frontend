@@ -39,7 +39,6 @@ export default function CreateCourse() {
       if (!formData.facultyId) return;
 
       try {
-        setLoading(true);
         const departmentData = await fetchDepartmentsByFaculty(
           formData.facultyId
         );
@@ -62,12 +61,9 @@ export default function CreateCourse() {
     setLoading(true);
     try {
       const res = await createCourse(formData);
-      if (!res.ok) {
-        return message.error(res.message || "Failed to create course!");
-      }
 
       message.success("Course created successfully!");
-      navigate("/courses");
+      navigate("/admin/courses");
     } catch (error) {
       message.error("Failed to create course!");
     } finally {

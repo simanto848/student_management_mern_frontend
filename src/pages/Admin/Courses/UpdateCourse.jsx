@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Input, Select, message } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchCourseById, updateCourse } from "../../../services/CourseService";
@@ -20,40 +19,42 @@ const UpdateCourse = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const courseData = await fetchCourseById(courseId);
-        const facultiesData = await fetchFaculties();
-
-        if (courseData && facultiesData) {
-          setFaculties(facultiesData);
-          setSelectedFacultyId(courseData.departmentId.facultyId);
-
-          if (courseData.facultyId) {
-            const departmentsData = await fetchDepartmentsByFaculty(
-              courseData.facultyId
-            );
-            setDepartments(departmentsData.data);
-          }
-
-          form.setFieldsValue({
-            name: courseData.name,
-            code: courseData.code,
-            creditHours: courseData.creditHours,
-            semester: courseData.semester,
-            facultyId: courseData.facultyId,
-            departmentId: courseData.departmentId,
-            maintainable: courseData.maintainable,
-          });
-        }
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        message.error(error.message);
-      }
-    };
     fetchData();
   }, [courseId]);
+
+  const fetchData = async () => {
+    try {
+      const courseData = await fetchCourseById(courseId);
+      const facultiesData = await fetchFaculties();
+
+      if (courseData && facultiesData) {
+        setFaculties(facultiesData);
+        const initialFacultyId = courseData.departmentId.facultyId;
+
+        // Fetch departments for the initial faculty
+        const departmentsData = await fetchDepartmentsByFaculty(
+          initialFacultyId
+        );
+        setDepartments(departmentsData.data);
+        setSelectedFacultyId(initialFacultyId);
+
+        // Set initial form values
+        form.setFieldsValue({
+          name: courseData.name,
+          code: courseData.code,
+          creditHours: courseData.creditHours,
+          semester: courseData.semester,
+          facultyId: initialFacultyId,
+          departmentId: courseData.departmentId._id || "",
+          maintainable: courseData.maintainable,
+        });
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      message.error(error.message);
+    }
+  };
 
   const handleFacultyChange = async (facultyId) => {
     setSelectedFacultyId(facultyId);
@@ -75,7 +76,7 @@ const UpdateCourse = () => {
         throw new Error(data.message || "Failed to update course");
       }
       message.success("Course updated successfully");
-      navigate("/courses");
+      navigate("/admin/courses");
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -151,6 +152,7 @@ const UpdateCourse = () => {
                 placeholder="Select Faculty"
                 onChange={handleFacultyChange}
                 size="large"
+                value={selectedFacultyId}
               >
                 {faculties.map((faculty) => (
                   <Option key={faculty._id} value={faculty._id}>
