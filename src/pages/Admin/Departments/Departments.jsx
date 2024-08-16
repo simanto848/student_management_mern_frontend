@@ -10,6 +10,7 @@ import {
 } from "../../../services/DepartmentService";
 import { fetchFaculties } from "../../../services/FacultyService";
 import Loading from "../../../components/Loading";
+import VoiceToTextRecognition from "../../../components/VoiceToTextRecognition";
 
 const { Option } = Select;
 
@@ -21,6 +22,7 @@ export default function Departments() {
   const [editingDepartment, setEditingDepartment] = useState(null);
   const [departmentToDelete, setDepartmentToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -41,6 +43,10 @@ export default function Departments() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleVoiceInput = (transcript) => {
+    setSearchText(transcript);
   };
 
   const handleEdit = (department) => {
@@ -92,6 +98,12 @@ export default function Departments() {
       setDeleteModalVisible(false);
     }
   };
+
+  const filteredDepartments = departments.filter(
+    (department) =>
+      department.shortName.toLowerCase().includes(searchText.toLowerCase()) ||
+      department.facultyId.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const columns = [
     {
@@ -153,6 +165,15 @@ export default function Departments() {
             <h1 className="text-slate-600 text-center text-3xl font-bold">
               Faculty List
             </h1>
+            <div className="flex items-center">
+              <Input
+                placeholder="Search Departments"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                style={{ marginRight: 8 }}
+              />
+              <VoiceToTextRecognition onTranscript={handleVoiceInput} />
+            </div>
             <Button
               className="mr-2 text-blue-600 border-blue-600"
               size="large"
@@ -164,7 +185,7 @@ export default function Departments() {
             </Button>
           </div>
           <Table
-            dataSource={departments}
+            dataSource={filteredDepartments}
             columns={columns}
             rowKey="_id"
             pagination={{ pageSize: 10 }}
