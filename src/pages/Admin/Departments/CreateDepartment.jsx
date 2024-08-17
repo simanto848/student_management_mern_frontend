@@ -27,7 +27,7 @@ export default function CreateDepartment() {
       const res = await createDepartment(values);
       if (res.ok) {
         message.success(`Department ${values.shortName} added successfully`);
-        navigate("/departments");
+        navigate("/admin/departments");
         setShortName("");
       } else {
         message.error(res.message || "Failed to add department");

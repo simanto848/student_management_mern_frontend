@@ -20,7 +20,7 @@ export default function CreateSession() {
     try {
       await createSession(session);
       message.success(`Session "${session}" added successfully`);
-      navigate("/sessions");
+      navigate("/admin/sessions");
       setSession("");
     } catch (error) {
       console.error(error);

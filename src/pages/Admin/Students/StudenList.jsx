@@ -208,6 +208,11 @@ export default function StudentList() {
           dataSource={data}
           pagination={{ pageSize: 10 }}
           loading={loading}
+          className="shadow-lg"
+          scroll={{ x: 768 }}
+          bordered
+          footer={() => `Total Student: ${students.length}`}
+          style={{ borderRadius: 8 }}
         />
 
         <Modal

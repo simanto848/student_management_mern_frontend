@@ -90,7 +90,15 @@ export default function Sessions() {
         {loading ? (
           <Loading />
         ) : (
-          <Table dataSource={sessions} rowKey="_id">
+          <Table
+            dataSource={sessions}
+            rowKey="_id"
+            className="shadow-lg"
+            scroll={{ x: 768 }}
+            bordered
+            footer={() => `Total Session: ${sessions.length}`}
+            style={{ borderRadius: 8 }}
+          >
             <Column
               title="SL"
               dataIndex="index"

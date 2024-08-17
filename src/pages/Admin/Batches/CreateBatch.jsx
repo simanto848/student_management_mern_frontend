@@ -51,7 +51,7 @@ export default function CreateBatch() {
     try {
       await createBatch({ name: batch, departmentId, sessionId });
       message.success(`Batch "${batch}" added successfully`);
-      navigate("/batches");
+      navigate("/admin/batches");
     } catch (error) {
       console.error(error);
       message.error("Failed to add batch");

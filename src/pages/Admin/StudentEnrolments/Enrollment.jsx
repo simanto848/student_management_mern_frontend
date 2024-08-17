@@ -159,7 +159,16 @@ export default function StudentList() {
             <Link to="/admin/add/student">Add Student</Link>
           </Button>
         </div>
-        <Table columns={columns} dataSource={data} loading={loading} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          className="shadow-lg"
+          scroll={{ x: 768 }}
+          bordered
+          footer={() => `Total Student Enrollment: ${students.length}`}
+          style={{ borderRadius: 8 }}
+        />
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export default function CreateFaculty() {
       await addFaculty(name);
       setLoading(false);
       setName("");
-      navigate("/faculties");
+      navigate("/admin/faculties");
     } catch (error) {
       message.error("Failed to add faculty");
       setLoading(false);
