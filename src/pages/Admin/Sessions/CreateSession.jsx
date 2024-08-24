@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { createSession } from "../../../services/SessionService";
@@ -61,7 +61,7 @@ export default function CreateSession() {
               </Button>
             </Item>
             <Item>
-              <Button size="large" htmlType="submit" className="w-full">
+              <Button size="large" className="w-full">
                 <Link to="/admin/sessions">Cancel</Link>
               </Button>
             </Item>

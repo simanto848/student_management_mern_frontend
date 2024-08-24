@@ -2,11 +2,46 @@ const BASE_URL = "/api/admin/session";
 
 export async function fetchSessions() {
   const response = await fetch(BASE_URL);
+
   if (!response.ok) {
     throw new Error("Failed to fetch sessions");
   }
   const data = await response.json();
   return data;
+}
+
+export async function fetchSessionById(sessionId) {
+  const response = await fetch(`${BASE_URL}/${sessionId}`);
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message);
+  }
+  return response.json();
+}
+
+export async function fetchSessionByName(sessionName) {
+  const response = await fetch(`${BASE_URL}/get-by-name`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ session: sessionName }),
+  });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message);
+  }
+  return response.json();
+}
+
+export async function fetchSessionBatches(sessionId) {
+  const response = await fetch(`${BASE_URL}/batches/${sessionId}`);
+
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message);
+  }
+  return response.json();
 }
 
 export async function createSession(sessionName) {
