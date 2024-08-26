@@ -119,7 +119,7 @@ export default function Students() {
       key: "actions",
       render: (_, record) => (
         <div className="flex flex-row gap-1">
-          <Link to={`/admin/update-student/${record.key}`}>
+          <Link to={`/admin/update/student/${record.key}`}>
             <Button
               size="small"
               icon={<EditOutlined />}
@@ -177,7 +177,7 @@ export default function Students() {
             size="large"
             type="primary"
           >
-            <Link to="/admin/create-student">Add Student</Link>
+            <Link to="/admin/add/student">Add Student</Link>
           </Button>
         </div>
         <Table
