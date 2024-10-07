@@ -6,6 +6,7 @@ import TeacherLogin from "../pages/TeacherLogin";
 import StaffLogin from "../pages/StaffLogin";
 import NotFound from "../pages/NotFound";
 import OnlyAdminRoutes from "../components/OnlyAdminRoutes";
+import OnlyTeacherRoutes from "../components/OnlyTeacherRoutes";
 import Dashboard from "../pages/Dashboard";
 import Faculties from "../pages/Admin/Faculties/Faculties";
 import CreateFaculty from "../pages/Admin/Faculties/CreateFaculty";
@@ -29,6 +30,7 @@ import CreateBatch from "../pages/Admin/Batches/CreateBatch";
 import Enrollment from "../pages/Admin/StudentEnrolments/Enrollment";
 import StudentProfile from "../pages/Admin/StudentEnrolments/StudentProfile";
 import CreateEnrolment from "../pages/Admin/StudentEnrolments/CreateEnrolment";
+import TeacherRoutes from "./TeacherRoutes";
 
 const adminRoutes = [
   { path: "faculties", element: <Faculties /> },
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
         element: <OnlyAdminRoutes element={<Dashboard />} />,
         children: adminRoutes.map((route) => ({
           path: `/admin/${route.path}`,
+          element: route.element,
+        })),
+      },
+      {
+        path: "teacher",
+        element: <OnlyTeacherRoutes element={<Dashboard />} />,
+        children: TeacherRoutes.map((route) => ({
+          path: `/teacher/${route.path}`,
           element: route.element,
         })),
       },
