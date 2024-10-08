@@ -9,6 +9,15 @@ export async function fetchStudents() {
   return data;
 }
 
+export async function fetchStudentsByBatch(batchId) {
+  const response = await fetch(`${BASE_URL}/batch/${batchId}/students`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch students for the batch");
+  }
+  const data = await response.json();
+  return data;
+}
+
 export async function createStudent(student) {
   const response = await fetch(`${BASE_URL}/`, {
     method: "POST",

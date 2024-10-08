@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Table, message, Input, Spin, Modal } from "antd";
 import { fetchCourses, fetchBatches } from "../../services/TeacherCourse";
+import { fetchStudentsByBatch } from "../../services/StudentService";
 import Loading from "../../components/Loading";
 
 export default function Courses() {
@@ -8,8 +9,10 @@ export default function Courses() {
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [batchLoading, setBatchLoading] = useState(false);
-  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [students, setStudents] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [viewingStudents, setViewingStudents] = useState(false);
 
   useEffect(() => {
     fetchCourseIds();
@@ -39,13 +42,30 @@ export default function Courses() {
   };
 
   const handleBatchViewToggle = (courseId) => {
-    setSelectedCourseId(courseId);
     fetchBatchesForCourse(courseId);
     setIsModalVisible(true);
+    setViewingStudents(false);
   };
 
   const handleModalClose = () => {
     setIsModalVisible(false);
+  };
+
+  const handleBatchClick = async (batchId) => {
+    try {
+      setStudentLoading(true);
+      const data = await fetchStudentsByBatch(batchId);
+      setStudents(data);
+      setStudentLoading(false);
+      setViewingStudents(true);
+    } catch (error) {
+      message.error("Failed to fetch students for the batch");
+      setStudentLoading(false);
+    }
+  };
+
+  const handleBackToBatches = () => {
+    setViewingStudents(false);
   };
 
   const columns = [
@@ -86,6 +106,37 @@ export default function Courses() {
       title: "Batch Name",
       dataIndex: "name",
     },
+    {
+      title: "Actions",
+      render: (text, record) => (
+        <Button onClick={() => handleBatchClick(record._id)}>
+          View Students
+        </Button>
+      ),
+    },
+  ];
+
+  const studentColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+    },
+    {
+      title: "Registration No",
+      dataIndex: "registrationNo",
+    },
+    {
+      title: "Roll No",
+      dataIndex: "rollNo",
+    },
+    {
+      title: "Phone",
+      dataIndex: "phoneNo",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
   ];
 
   if (loading) {
@@ -113,13 +164,30 @@ export default function Courses() {
       </div>
 
       <Modal
-        title="Batches"
+        title={viewingStudents ? "Students" : "Batches"}
         open={isModalVisible}
         onCancel={handleModalClose}
         footer={null}
         width={800}
       >
-        {batchLoading ? (
+        {viewingStudents ? (
+          <>
+            <Button onClick={handleBackToBatches}>Back to Batches</Button>
+            {studentLoading ? (
+              <Spin />
+            ) : students.length === 0 ? (
+              <p>No students assigned to this batch.</p>
+            ) : (
+              <Table
+                dataSource={students}
+                columns={studentColumns}
+                rowKey="_id"
+                pagination={false}
+                bordered
+              />
+            )}
+          </>
+        ) : batchLoading ? (
           <Spin />
         ) : batches.length === 0 ? (
           <p>No batches assigned to this course.</p>
