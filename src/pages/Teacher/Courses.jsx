@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Button, Table, message, Input, Spin, Modal } from "antd";
 import { fetchCourses, fetchBatches } from "../../services/TeacherCourse";
 import { fetchStudentsByBatch } from "../../services/StudentService";
+import { submitForApproval } from "../../services/ResultService";
+import ResultForm from "./Results";
 import Loading from "../../components/Loading";
 
 export default function Courses() {
@@ -13,6 +15,8 @@ export default function Courses() {
   const [studentLoading, setStudentLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [viewingStudents, setViewingStudents] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
 
   useEffect(() => {
     fetchCourseIds();
@@ -35,6 +39,7 @@ export default function Courses() {
       const data = await fetchBatches(courseId);
       setBatches(data);
       setBatchLoading(false);
+      setSelectedCourseId(courseId);
     } catch (error) {
       message.error("Failed to fetch batches for the course");
       setBatchLoading(false);
@@ -49,6 +54,7 @@ export default function Courses() {
 
   const handleModalClose = () => {
     setIsModalVisible(false);
+    setSelectedStudent(null);
   };
 
   const handleBatchClick = async (batchId) => {
@@ -66,6 +72,25 @@ export default function Courses() {
 
   const handleBackToBatches = () => {
     setViewingStudents(false);
+  };
+
+  const handleAddResultClick = (student) => {
+    setSelectedStudent(student);
+  };
+
+  const handleSubmitForApproval = (batchId) => async () => {
+    try {
+      await submitForApproval(batchId);
+      message.success("Results submitted for approval successfully");
+    } catch (error) {
+      message.error(error.message || "Failed to submit results for approval");
+    }
+  };
+
+  const handleResultFormComplete = () => {
+    // Refresh data or close the modal after result submission
+    setSelectedStudent(null);
+    message.success("Result successfully added for the student.");
   };
 
   const columns = [
@@ -109,9 +134,14 @@ export default function Courses() {
     {
       title: "Actions",
       render: (text, record) => (
-        <Button onClick={() => handleBatchClick(record._id)}>
-          View Students
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => handleBatchClick(record._id)}>
+            View Students / Add Results
+          </Button>
+          <Button onClick={handleSubmitForApproval(record._id)}>
+            Submit Results for Approval
+          </Button>
+        </div>
       ),
     },
   ];
@@ -137,6 +167,12 @@ export default function Courses() {
       title: "Email",
       dataIndex: "email",
     },
+    {
+      title: "Actions",
+      render: (text, record) => (
+        <Button onClick={() => handleAddResultClick(record)}>Add Result</Button>
+      ),
+    },
   ];
 
   if (loading) {
@@ -150,9 +186,10 @@ export default function Courses() {
           <h1 className="text-slate-600 text-center text-3xl font-bold">
             Teacher&apos;s Course List
           </h1>
-          <div className="flex space-x-4">
-            <Input placeholder="Search Courses" className="lg:w-72 h-auto" />
-          </div>
+          <Input
+            placeholder="Search Courses"
+            className="w-80 h-10 justify-self-center self-center"
+          />
         </div>
         <Table
           dataSource={courses}
@@ -172,7 +209,9 @@ export default function Courses() {
       >
         {viewingStudents ? (
           <>
-            <Button onClick={handleBackToBatches}>Back to Batches</Button>
+            <Button onClick={handleBackToBatches} className="mb-2">
+              Back to Batches
+            </Button>
             {studentLoading ? (
               <Spin />
             ) : students.length === 0 ? (
@@ -198,6 +237,22 @@ export default function Courses() {
             rowKey="_id"
             pagination={false}
             bordered
+          />
+        )}
+      </Modal>
+
+      <Modal
+        title="Add Result"
+        open={!!selectedStudent}
+        onCancel={() => setSelectedStudent(null)}
+        footer={null}
+        width={600}
+      >
+        {selectedStudent && selectedCourseId && (
+          <ResultForm
+            studentId={selectedStudent._id}
+            courseId={selectedCourseId}
+            onComplete={handleResultFormComplete}
           />
         )}
       </Modal>

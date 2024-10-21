@@ -57,20 +57,16 @@ const DashSidebar = ({ drawerVisible, toggleDrawer }) => {
       key: "/teacher/courses",
     },
     {
-      label: <Link to="/teacher/students">Students</Link>,
-      key: "/teacher/students",
-    },
-    {
       label: <Link to="/teacher/attendance">Attendance</Link>,
       key: "/teacher/attendance",
     },
     {
-      label: <Link to="/teacher/assignments">Assignments</Link>,
-      key: "/teacher/assignments",
+      label: <Link to="/teacher/student/result">Result</Link>,
+      key: "/teacher/student/result",
     },
     {
-      label: <Link to="/teacher/grades">Grades</Link>,
-      key: "/teacher/grades",
+      label: <Link to="/teacher/student/grades">Grades</Link>,
+      key: "/teacher/student/grades",
     },
   ];
 
